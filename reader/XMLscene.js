@@ -12,6 +12,23 @@ XMLscene.prototype.getInterface = function (interface) {
 
 var updatePeriod = 100;
 
+XMLscene.prototype.logPicking = function ()
+{
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];				
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}		
+	}
+}
+
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
@@ -30,15 +47,7 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(updatePeriod); //100 msec
 
-	this.su = 0;
-	this.sv = 0;
-
-	this.du = 8;
-	this.dv = 8;
-	
-	//this.vehicle = new MyVehicle(this);
-	//this.chessboard = new MyChessboard(this, this.du, this.dv, "./resources/wood.png" ,this.su,this.sv,
-	//[0,1,1,1], [0.1,0.1,0.1,1], [1,0.1,0.1,1]);
+	this.setPickEnabled(true);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -54,7 +63,7 @@ XMLscene.prototype.initCameras = function () {
 
 XMLscene.prototype.update = function(currTime) {
 
-	if(this.graph.loadedOk){
+	/*if(this.graph.loadedOk){
 
 		for(var i = 0; i < this.graph.animations_list.length; i++){
 
@@ -67,7 +76,7 @@ XMLscene.prototype.update = function(currTime) {
 			}
 
 		}
-	}
+	}*/
 	/*if(this.su < (this.du-1.0)){
 		this.su += 1.0;
 	} else if((this.su == (this.du-1.0)) && (this.sv < (this.dv-1.0))){
@@ -207,11 +216,15 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.display = function () {
+	this.logPicking();
+	this.clearPickRegistration();
+
 	// ---- BEGIN Background, camera and axis setup
 	
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    this.gl.enable(this.gl.DEPTH_TEST);
 
 	// Initialize Model-View matrix as identity (no transformation
 	this.updateProjectionMatrix();
@@ -244,8 +257,6 @@ XMLscene.prototype.display = function () {
 			this.lights[i].setVisible(true);
 			this.lights[i].update();
 		}
-
-		//this.chessboard.display();
 
 		var rootVector = [];
 		rootVector.push(this.graph.component_list[0]);

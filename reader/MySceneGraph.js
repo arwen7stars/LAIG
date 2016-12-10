@@ -655,6 +655,40 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 			var prim = new MyPrimitive(primID, patch);
 
 
+		} else if (primitive_name == "board") {
+			// BOARD
+
+			console.log("board found.");
+
+			primAtual = primitives_ini[0].children[i].getElementsByTagName("board");
+
+			var piece = primAtual[0];
+
+			var size_casa = this.reader.getFloat(piece, 'size_casa', 1);
+			var first_player = this.reader.getString(piece, 'first_player', 1);
+
+			console.log("Board initials read from file: { size_casa = " + size_casa + " first_player = " + first_player + "}");
+
+			var board = new MyBoard(this.scene, size_casa, first_player);
+			var prim = new MyPrimitive(primID, board);
+
+		} else if (primitive_name == "piece") {
+			// PLANE
+
+			console.log("piece found.");
+
+			primAtual = primitives_ini[0].children[i].getElementsByTagName("piece");
+
+			var piece = primAtual[0];
+
+			var nFloors = this.reader.getInteger(piece, 'nFloors', 1);
+			var type = this.reader.getString(piece, 'type', 1);
+
+			console.log("Piece initials read from file: { nFloors = " + nFloors + " type = " + type + " }");
+
+			var piece = new MyPiece(this.scene, nFloors, type);
+			var prim = new MyPrimitive(primID, piece);
+
 		} else if (primitive_name == "vehicle") {
 			console.log("vehicle found.");
 

@@ -16,7 +16,7 @@
         </perspective>
 
        	<perspective id="view2" near="0.1" far="500" angle="0.4">
-            <from x="3" y="20" z="0" />
+            <from x="3" y="40" z="0" />
             <to x="3" y="1" z="3" />
         </perspective>
         
@@ -26,7 +26,7 @@
     <illumination doublesided="1" local="1" >
     
         <ambient r="0" g="0" b="0" a="1.0" />
-        <background r="0.6" g="0.9" b="1.0" a="1.0" />
+        <background r="0" g="0" b="0" a="1.0" />
         
     </illumination>
     
@@ -73,6 +73,7 @@
     <textures>
 		<texture id="floor_tex" file="./resources/sea.png" length_s="1" length_t="1" />
         <texture id="wood" file="./resources/wood.png" length_s="1" length_t="1" />
+        <texture id="board" file="./resources/wood.jpg" length_s="1" length_t="1" />
         <texture id="white" file="./resources/bed.png" length_s="1" length_t="1" />
         <texture id="blue" file="./resources/pillow.png" length_s="1" length_t="1" />
         <texture id="window" file="./resources/window.png" length_s="1" length_t="1" />
@@ -170,30 +171,9 @@
         	<vehicle />   
         </primitive>
 
-		<primitive id = "chessboardone">
-			<chessboard du="9" dv="9" textureref="wood" su="3" sv="3">
-					   <c1 r="0" g="1" b="1" a="1" />
-					   <c2 r="0.1" g="0.1" b="0.1" a="1" />
-					   <cs r="1" g="0.1" b="0.1" a="1" />
-			</chessboard>
-		</primitive>
-
-		<primitive id = "chessboardtwo">
-			<chessboard du="9" dv="9" textureref="white" su="3" sv="3">
-					   <c1 r="0" g="1" b="1" a="1" />
-					   <c2 r="0.1" g="0.1" b="0.1" a="1" />
-					   <cs r="1" g="0.1" b="0.1" a="1" />
-			</chessboard>
-		</primitive>
-
-		<primitive id = "chessboardthree">
-			<chessboard du="9" dv="9" textureref="wood" su="1" sv="1">
-					   <c1 r="1" g="0" b="0" a="1" />
-					   <c2 r="0.9" g="0.9" b="0.9" a="1" />
-					   <cs r="0" g="0.1" b="0.1" a="1" />
-			</chessboard>
-		</primitive>
-		
+ 		<primitive id = "board">
+			<board size_casa="0.21" first_player="red"/>
+		</primitive>		
     </primitives>
     
     
@@ -211,123 +191,34 @@
             <texture id="none" />
             
             <children>
-                <componentref id="table_1" />
-				<componentref id="table_2" />
-				<componentref id="table_3" />
-				<componentref id="boat" />
-				<componentref id="ball" />
-				<componentref id="oasis" />
-				<componentref id="sea" />
+                <componentref id="table" />
             </children>   
         </component>
 
-        <component id = "sea">
-			<transformation>
-				<translate x="-50" y="-2" z="-50" />
-				<rotate axis="x" angle="90" />
-				<rotate axis="y" angle="180" />
-				<scale x="100" y="100" z="100" />
-				<translate x="-1" y="0" z="0" />
-			</transformation>
 
-			<materials>
-                <material id="sea" />
-            </materials>
-                    
-            <texture id="floor_tex" />
-            
-            <children>
-                <primitiveref id="rect" /> 
-            </children> 
-        </component>
-
-        <component id = "oasis">
+        <component id = "table">
 			<transformation>
-				<rotate axis="x" angle="90" />
-				<rotate axis="y" angle="180" />
-				<scale x="5" y="6" z="5" />
-				<translate x="-1" y="0" z="0" />
+				<translate x="3" y="-6" z="-9" />
+				<scale x="6" y="6" z="6" />
 			</transformation>
 
 			<materials>
                 <material id="inherit" />
             </materials>
                     
-            <texture id="boat" />
-            
-            <children>
-                <componentref id="cube_oasis" />
-                <componentref id="legs_oasis" />
-            </children> 
-        </component>
-
-        <component id = "cube_oasis">
-        	<transformation>
-        		<scale x="1" y="1" z="0.05" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-
             <texture id="inherit" />
-
-        	<children>
-                <componentref id="front_face" />
-             	<componentref id="back_face" />
-             	<componentref id="top_face" />
-             	<componentref id="bottom_face" />
-             	<componentref id="right_face" />
-             	<componentref id="left_face" />
+            
+            <children>
+            	<componentref id="board" />
+                <componentref id="legs" />
+           	 	<componentref id="up_table" />
             </children> 
         </component>
 
-        <component id = "legs_oasis">
+        <component id = "board">
 			<transformation>
-				<translate x="0.6" y="0.5" z="-0.51" />
-				<rotate axis="x" angle="90" />
-				<scale x="0.5" y="0.5" z="0.5" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="wood" />
-            
-            <children>
-                <componentref id="leg1" />
-             	<componentref id="leg2" />
-             	<componentref id="leg3" />
-             	<componentref id="leg4" />
-            </children> 
-        </component>
-
-         <component id = "ball">
-			<transformation>
-				
-				<translate x="-3" y="-1.5" z="3" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="ball" />
-            
-            <children>
-           	 	<primitiveref id="sphere" />    
-            </children>
-
-            <animation>
-                <primitiveref id="circular1" /> 
-            </animation> 
-		</component>
-
-		<component id = "arms">
-
-			<transformation>
-				<scale x="0.15" y="0.15" z="5" />
+				<rotate axis="x" angle="-90" />
+				<translate x="-1.25" y="-2.85" z="1.32" />
             </transformation>
 
             <materials>
@@ -337,138 +228,7 @@
             <texture id="wood" />
             
             <children>
-            	<componentref id="body" />    
-            </children> 
-		</component>
-
-
-
-        <component id = "boat">
-
-			<transformation>
-				
-				<translate x="8" y="0" z="5" />
-				<rotate axis="y" angle="90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="vehicle" />   
-            </children> 
-
-            <animation>
-                <primitiveref id="linear1" /> 
-            </animation>
-		</component>
-
-        <component id = "table_1">
-			<transformation>
-				<translate x="1.5" y="0" z="0" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-            	<componentref id="chessboard_1" />
-                <componentref id="legs" />
-           	 	<componentref id="up_table" />
-            </children> 
-        </component>
-
-         <component id = "table_2">
-			<transformation>
-				<translate x="4" y="0" z="0" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-            	<componentref id="chessboard_2" />
-                <componentref id="legs" />
-           	 	<componentref id="up_table" />
-            </children> 
-        </component>
-
-         <component id = "table_3">
-			<transformation>
-				<translate x="2.75" y="0" z="2.75" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-            	<componentref id="chessboard_3" />
-                <componentref id="legs" />
-           	 	<componentref id="up_table" />
-            </children> 
-        </component>
-
-
-        <component id = "chessboard_1">
-			<transformation>
-				<translate x="-0.2" y="1.32" z="2" />
-				<rotate axis="x" angle="-90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="chessboardone" />   
-            </children> 
-		</component>
-
-		<component id = "chessboard_2">
-			<transformation>
-				<translate x="-0.2" y="1.32" z="2" />
-				<rotate axis="x" angle="-90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="chessboardtwo" />   
-            </children> 
-		</component>
-
-		<component id = "chessboard_3">
-			<transformation>
-				<translate x="-0.2" y="1.32" z="2" />
-				<rotate axis="x" angle="-90" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="chessboardthree" />   
+                <primitiveref id="board" />   
             </children> 
 		</component>
 
@@ -573,7 +333,7 @@
                 <material id="inherit" />
             </materials>
 
-            <texture id="wood" />
+            <texture id="board" />
 
         	<children>
                  <componentref id="cube" />
