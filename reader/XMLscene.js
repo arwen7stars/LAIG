@@ -22,8 +22,20 @@ XMLscene.prototype.logPicking = function ()
 				{
 					var customId = this.pickResults[i][1];				
 					console.log("Picked object: " + obj + ", with pick id " + customId);
-					this.i = Math.floor(customId/10);
-					this.j = customId % 10;
+
+					if(customId < 100){
+						this.lin = Math.floor(customId/10);
+						this.col = customId % 10;
+
+						console.log("LINHA " + this.lin);
+						console.log("COLUNA " + this.col);
+					} else if (customId < 200){
+						this.first = customId % 100;
+						console.log("FIRST " + this.first);
+					} else {
+						this.second = customId % 200;
+						console.log("SECOND " + this.second);
+					}
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -49,8 +61,11 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(updatePeriod); //100 msec
 
-	this.i = -1;
-	this.j = -1;
+	this.lin = -1;
+	this.col = -1;
+
+	this.first = -1;
+	this.second = -1;
 
 	this.setPickEnabled(true);
 };
@@ -80,9 +95,17 @@ XMLscene.prototype.update = function(currTime) {
 			}
 
 		}*/
-			if(this.i > 0){
-				this.graph.board.getFirstPieces()[0].movePiece(this.j,this.i);
-				console.log("I " + this.i + " J " + this.j);
+			if(this.col >= 0 || this.lin >= 1){
+				if(this.first > 0){
+					this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
+					this.first = -1;
+				} else if (this.second > 0){
+
+					this.graph.board.getSecondPieces()[this.second].movePiece(this.col,this.lin);
+					this.second = -1;
+				}
+				this.lin = -1;
+				this.col = -1;
 			}
 
 	}

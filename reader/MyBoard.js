@@ -40,6 +40,10 @@ MyBoard.prototype.getFirstPieces = function () {
 	return this.first_pieces;
 }
 
+MyBoard.prototype.getSecondPieces = function () {
+	return this.second_pieces;
+}
+
 MyBoard.prototype.setInitialBoard = function () {
 	// white = [1,1,1,1, 2,2, 3, 3]
 	// linhas - 0 a 8
@@ -78,6 +82,7 @@ MyBoard.prototype.displayPieces = function () {
 		var column = this.first_pieces[i].getColumn();
 
 		this.scene.translate(line*this.size_casa, column*this.size_casa, 0);
+		this.scene.registerForPick(100+i, this.first_pieces[i]);
 		this.first_pieces[i].display();
 
 		this.scene.popMatrix();
@@ -90,6 +95,7 @@ MyBoard.prototype.displayPieces = function () {
 		var column = this.second_pieces[i].getColumn();
 
 		this.scene.translate(line*this.size_casa, column*this.size_casa, 0);
+		this.scene.registerForPick(200+i, this.second_pieces[i]);
 		this.second_pieces[i].display();
 
 		this.scene.popMatrix();
