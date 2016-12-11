@@ -79,7 +79,7 @@
         <texture id="window" file="./resources/window.png" length_s="1" length_t="1" />
         <texture id="frame" file="./resources/frame.png" length_s="1" length_t="1" />
 		<texture id="boat" file="./resources/boat.png" length_s="1" length_t="1" />
-		<texture id="ball" file="./resources/ball.png" length_s="1" length_t="1" />
+		<texture id="carpet" file="./resources/carpet.png" length_s="1" length_t="1" />
     </textures>
 
     
@@ -191,10 +191,29 @@
             <texture id="none" />
             
             <children>
+            	<componentref id="carpet" />
                 <componentref id="table" />
             </children>   
         </component>
 
+        <component id = "carpet">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="180" />
+				<scale x="50" y="50" z="50" />		
+				<translate x="-0.55" y="-0.45" z="-0.1" />
+			</transformation>
+
+			<materials>
+                <material id="sea" />
+            </materials>
+                    
+            <texture id="carpet" />
+            
+            <children>
+                <primitiveref id="rect" /> 
+            </children> 
+        </component>
 
         <component id = "table">
 			<transformation>

@@ -1,7 +1,6 @@
 function MyTopFloor(scene, type) {
  	CGFobject.call(this,scene);
 
- 	console.log("TYPE " + type);
 
  	if(type == "red")
  		this.texture = new CGFtexture(this.scene, "./resources/red.jpg");
@@ -11,22 +10,22 @@ function MyTopFloor(scene, type) {
 	this.patch = new MyPatch(this.scene, 2, 2, 6, 6,[
         [  // U = 0
            // V = 0..2;
-            [   0, 0, 1.5, 1 ],
-            [-0.5, 0.2, 0.5, 1 ],
+            [   0, 0, 2, 1 ],
+            [-0.5, 0.5, 0.5, 1 ],
             [  -1, 1,   0, 1 ]				
         ],
             // U = 1
             // V = 0..2
         [
-            [ 0, 0, 1.5, 1 ],
-            [ 0, 0.2, 0.5, 1 ],
+            [ 0, 0, 2, 1 ],
+            [ 0, 0.5, 0.5, 1 ],
             [ 0, 1,   0, 1 ]						 
         ],
            // U = 2
            // V = 0..2
         [					
-             [ 0, 0, 1.5, 1 ],
-             [ 0.5, 0.2, 0.5, 1 ],
+             [ 0, 0, 2, 1 ],
+             [ 0.5, 0.5, 0.5, 1 ],
              [ 1,   1,   0, 1 ]
         ]
 	]);

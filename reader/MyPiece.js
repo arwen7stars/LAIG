@@ -7,6 +7,8 @@ function MyPiece(scene, n_floors, type) {
  	this.n_floors = n_floors;
  
 	this.floor = new MyTopFloor(this.scene, type);
+
+	this.sphere = new MySphere(this.scene, 1, 30, 30)
  };
 
 MyPiece.prototype = Object.create(CGFobject.prototype);
@@ -36,7 +38,29 @@ MyPiece.prototype.display = function () {
 					this.scene.scale(0.3,0.3,0.3);
 					this.floor.display();
 				this.scene.popMatrix();
+
+				this.scene.pushMatrix();
+					this.scene.translate(0, 0, 1.4);
+					this.scene.scale(0.08,0.08,0.08);
+				this.sphere.display();
+			this.scene.popMatrix();
+			} else{
+
+			this.scene.pushMatrix();
+				this.scene.translate(0, 0, 1.2);
+				this.scene.scale(0.08,0.08,0.08);
+				this.sphere.display();
+			this.scene.popMatrix();
+
 			}
+		} else{
+
+		this.scene.pushMatrix();
+			this.scene.translate(0, 0, 1);
+			this.scene.scale(0.08,0.08,0.08);
+			this.sphere.display();
+		this.scene.popMatrix();
+
 		}
 	}
     

@@ -36,6 +36,10 @@ function MyBoard(scene, size_casa, first_player) {
 MyBoard.prototype = Object.create(CGFobject.prototype);
 MyBoard.prototype.constructor = MyBoard;
 
+MyBoard.prototype.getFirstPieces = function () {
+	return this.first_pieces;
+}
+
 MyBoard.prototype.setInitialBoard = function () {
 	// white = [1,1,1,1, 2,2, 3, 3]
 	// linhas - 0 a 8
@@ -96,7 +100,6 @@ MyBoard.prototype.displayPieces = function () {
 MyBoard.prototype.display = function () {
 	var degToRad = Math.PI / 180.0;
 
-	this.first_pieces[0].movePiece(3,3);
 	this.displayPieces();
 
     for(var i = 0; i < 9; i++){
@@ -105,7 +108,6 @@ MyBoard.prototype.display = function () {
             this.scene.pushMatrix();
 			this.texture.bind(0);
             this.scene.translate(0, j*this.size_casa,0);
-            this.scene.scale(0.96,0.96,0.96);
             this.scene.registerForPick(10*(i+1)+j, this.picking_objects[i][j]);
 
             this.picking_objects[i][j].display();

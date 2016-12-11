@@ -10,7 +10,7 @@ XMLscene.prototype.getInterface = function (interface) {
 	this.interface = interface;
 }
 
-var updatePeriod = 100;
+var updatePeriod = 1000;
 
 XMLscene.prototype.logPicking = function ()
 {
@@ -22,6 +22,8 @@ XMLscene.prototype.logPicking = function ()
 				{
 					var customId = this.pickResults[i][1];				
 					console.log("Picked object: " + obj + ", with pick id " + customId);
+					this.i = Math.floor(customId/10);
+					this.j = customId % 10;
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -47,6 +49,9 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(updatePeriod); //100 msec
 
+	this.i = -1;
+	this.j = -1;
+
 	this.setPickEnabled(true);
 };
 
@@ -62,10 +67,9 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.update = function(currTime) {
+	if(this.graph.loadedOk){
 
-	/*if(this.graph.loadedOk){
-
-		for(var i = 0; i < this.graph.animations_list.length; i++){
+		/*for(var i = 0; i < this.graph.animations_list.length; i++){
 
 			if(this.graph.animations_list[i][1] instanceof MyLinearAnimation){
 				this.graph.animations_list[i][1].update(currTime);
@@ -75,8 +79,13 @@ XMLscene.prototype.update = function(currTime) {
 				this.graph.animations_list[i][1].update(currTime);
 			}
 
-		}
-	}*/
+		}*/
+			if(this.i > 0){
+				this.graph.board.getFirstPieces()[0].movePiece(this.j,this.i);
+				console.log("I " + this.i + " J " + this.j);
+			}
+
+	}
 	/*if(this.su < (this.du-1.0)){
 		this.su += 1.0;
 	} else if((this.su == (this.du-1.0)) && (this.sv < (this.dv-1.0))){

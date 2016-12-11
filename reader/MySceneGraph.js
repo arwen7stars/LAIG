@@ -669,8 +669,8 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 
 			console.log("Board initials read from file: { size_casa = " + size_casa + " first_player = " + first_player + "}");
 
-			var board = new MyBoard(this.scene, size_casa, first_player);
-			var prim = new MyPrimitive(primID, board);
+			this.board = new MyBoard(this.scene, size_casa, first_player);
+			var prim = new MyPrimitive(primID, this.board);
 
 		} else if (primitive_name == "piece") {
 			// PLANE
