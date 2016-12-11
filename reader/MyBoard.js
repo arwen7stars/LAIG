@@ -45,27 +45,27 @@ MyBoard.prototype.setInitialBoard = function () {
 	// linhas - 0 a 8
 	// colunas - 1 a 9
 
-	this.first_pieces[0] = new PieceBoard(this.scene, 1, 1, 4, this.first_player);
-	this.first_pieces[1] = new PieceBoard(this.scene, 1, 1, 5, this.first_player);
-	this.first_pieces[2] = new PieceBoard(this.scene, 1, 1, 6, this.first_player);
-	this.first_pieces[3] = new PieceBoard(this.scene, 1, 2, 5, this.first_player);
+	this.first_pieces[0] = new PieceBoard(this.scene, 1, 1, 4, this.size_casa, this.first_player);
+	this.first_pieces[1] = new PieceBoard(this.scene, 1, 1, 5, this.size_casa, this.first_player);
+	this.first_pieces[2] = new PieceBoard(this.scene, 1, 1, 6, this.size_casa, this.first_player);
+	this.first_pieces[3] = new PieceBoard(this.scene, 1, 2, 5, this.size_casa, this.first_player);
 
-	this.first_pieces[4] = new PieceBoard(this.scene, 2, 1, 3, this.first_player);
-	this.first_pieces[5] = new PieceBoard(this.scene, 2, 1, 7, this.first_player);
+	this.first_pieces[4] = new PieceBoard(this.scene, 2, 1, 3, this.size_casa, this.first_player);
+	this.first_pieces[5] = new PieceBoard(this.scene, 2, 1, 7, this.size_casa, this.first_player);
 
-	this.first_pieces[6] = new PieceBoard(this.scene, 3, 0, 1, this.first_player);
-	this.first_pieces[7] = new PieceBoard(this.scene, 3, 0, 9, this.first_player);
+	this.first_pieces[6] = new PieceBoard(this.scene, 3, 0, 1, this.size_casa, this.first_player);
+	this.first_pieces[7] = new PieceBoard(this.scene, 3, 0, 9, this.size_casa, this.first_player);
 
-	this.second_pieces[0] = new PieceBoard(this.scene, 1, 7, 4, this.second_player);
-	this.second_pieces[1] = new PieceBoard(this.scene, 1, 7, 5, this.second_player);
-	this.second_pieces[2] = new PieceBoard(this.scene, 1, 7, 6, this.second_player);
-	this.second_pieces[3] = new PieceBoard(this.scene, 1, 6, 5, this.second_player);
+	this.second_pieces[0] = new PieceBoard(this.scene, 1, 7, 4, this.size_casa, this.second_player);
+	this.second_pieces[1] = new PieceBoard(this.scene, 1, 7, 5, this.size_casa, this.second_player);
+	this.second_pieces[2] = new PieceBoard(this.scene, 1, 7, 6, this.size_casa, this.second_player);
+	this.second_pieces[3] = new PieceBoard(this.scene, 1, 6, 5, this.size_casa, this.second_player);
 
-	this.second_pieces[4] = new PieceBoard(this.scene, 2, 7, 3, this.second_player);
-	this.second_pieces[5] = new PieceBoard(this.scene, 2, 7, 7, this.second_player);
+	this.second_pieces[4] = new PieceBoard(this.scene, 2, 7, 3, this.size_casa, this.second_player);
+	this.second_pieces[5] = new PieceBoard(this.scene, 2, 7, 7, this.size_casa, this.second_player);
 
-	this.second_pieces[6] = new PieceBoard(this.scene, 3, 8, 1, this.second_player);
-	this.second_pieces[7] = new PieceBoard(this.scene, 3, 8, 9, this.second_player);
+	this.second_pieces[6] = new PieceBoard(this.scene, 3, 8, 1, this.size_casa, this.second_player);
+	this.second_pieces[7] = new PieceBoard(this.scene, 3, 8, 9, this.size_casa, this.second_player);
 
 }
 
