@@ -81,7 +81,7 @@ MyBoard.prototype.displayPieces = function () {
 		var line = this.first_pieces[i].getLine();
 		var column = this.first_pieces[i].getColumn();
 
-		this.scene.translate(line*this.size_casa, column*this.size_casa, 0);
+		this.scene.translate(column*this.size_casa, line*this.size_casa, 0);
 		this.scene.registerForPick(100+i, this.first_pieces[i]);
 		this.first_pieces[i].display();
 
@@ -94,7 +94,7 @@ MyBoard.prototype.displayPieces = function () {
 		var line = this.second_pieces[i].getLine();
 		var column = this.second_pieces[i].getColumn();
 
-		this.scene.translate(line*this.size_casa, column*this.size_casa, 0);
+		this.scene.translate(column*this.size_casa, line*this.size_casa, 0);
 		this.scene.registerForPick(200+i, this.second_pieces[i]);
 		this.second_pieces[i].display();
 

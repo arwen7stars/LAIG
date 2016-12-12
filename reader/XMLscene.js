@@ -10,7 +10,7 @@ XMLscene.prototype.getInterface = function (interface) {
 	this.interface = interface;
 }
 
-var updatePeriod = 1000;
+var updatePeriod = 100;
 
 XMLscene.prototype.logPicking = function ()
 {
@@ -24,8 +24,8 @@ XMLscene.prototype.logPicking = function ()
 					console.log("Picked object: " + obj + ", with pick id " + customId);
 
 					if(customId < 100){
-						this.lin = Math.floor(customId/10);
-						this.col = customId % 10;
+						this.col = Math.floor(customId/10);
+						this.lin = customId % 10;
 
 						console.log("LINHA " + this.lin);
 						console.log("COLUNA " + this.col);
@@ -67,6 +67,12 @@ XMLscene.prototype.init = function (application) {
 	this.first = -1;
 	this.second = -1;
 
+	this.actualColumn = -1;
+	this.actualLine = -1;
+
+	this.increase = false;
+	this.decrease = false;
+
 	this.setPickEnabled(true);
 };
 
@@ -95,17 +101,76 @@ XMLscene.prototype.update = function(currTime) {
 			}
 
 		}*/
-			if(this.col >= 0 || this.lin >= 1){
+			if(this.col >= 1 || this.lin >= 0){
 				if(this.first > 0){
-					this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
-					this.first = -1;
-				} else if (this.second > 0){
+					console.log("LINE DEST " + this.lin);
+					console.log("COLUMN DEST " + this.col);
+					this.actualColumn = this.graph.board.getFirstPieces()[this.first].getColumn();
+					this.actualLine = this.graph.board.getFirstPieces()[this.first].getLine();
 
+					if( this.actualColumn < this.col){
+						this.actualColumn += 0.1;
+
+						console.log("ACTUAL LINE " + this.actualLine);
+						console.log("ACTUAL COLUMN " + this.actualColumn);
+
+						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
+						this.increase = true;
+					} else if(this.actualColumn > this.col){
+						this.actualColumn -= 0.1;
+
+						console.log("ACTUAL LINE " + this.actualLine);
+						console.log("ACTUAL COLUMN " + this.actualColumn);
+
+						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
+						this.decrease = true;
+					}
+
+					if( this.actualLine < this.lin){
+						this.actualLine += 0.1;
+			
+						console.log("ACTUAL COLUMN " + this.actualColumn);
+						console.log("ACTUAL LINE " + this.actualLine);
+
+						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
+						this.increase = true;
+					} else if(this.actualLine > this.lin){
+						this.actualLine -= 0.1;
+						
+						console.log("ACTUAL LINE " + this.actualLine);
+						console.log("ACTUAL COLUMN " + this.actualColumn);
+
+						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
+						this.decrease = true;
+
+					}
+
+					if(this.increase){
+						if(Math.round(this.actualColumn+0.5) == (this.col+1) && Math.round(this.actualLine+0.5) == (this.lin+1)){
+							this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
+							this.lin = -1;
+							this.col = -1;
+							this.first = -1;
+							this.increase = false;
+						}
+					} else if(this.decrease){
+
+						if(Math.floor(this.actualColumn-0.1) == (this.col-1) && Math.floor(this.actualLine-0.1) == (this.lin-1)){
+							this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
+							this.lin = -1;
+							this.col = -1;
+							this.first = -1;
+							this.decrease = false;
+						}
+					}
+										
+
+				} else if (this.second > 0){
 					this.graph.board.getSecondPieces()[this.second].movePiece(this.col,this.lin);
 					this.second = -1;
+					this.lin = -1;
+					this.col = -1;
 				}
-				this.lin = -1;
-				this.col = -1;
 			}
 
 	}

@@ -2,11 +2,11 @@
  * Creates a MyPiece object 
  * Uses two MySemiSphere objects to create a sphere
  */
-function PieceBoard(scene, n_floors, col, lin, size_casa, type) {
+function PieceBoard(scene, n_floors, lin, col, size_casa, type) {
  	CGFobject.call(this,scene);
  	this.n_floors = n_floors;
- 	this.col = col;
  	this.lin = lin;
+ 	this.col = col;
  	this.size_casa = size_casa;
  	
 	this.piece = new MyPiece(this.scene, n_floors, type);
@@ -16,8 +16,8 @@ PieceBoard.prototype = Object.create(CGFobject.prototype);
 PieceBoard.prototype.constructor = PieceBoard;
 
 PieceBoard.prototype.movePiece = function(col, lin) {
-	this.col = col;
 	this.lin = lin;
+	this.col = col;
 }
 
 PieceBoard.prototype.getColumn = function() {
