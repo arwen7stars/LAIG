@@ -28,6 +28,10 @@ PieceBoard.prototype.getLine = function() {
 	return this.lin;
 }
 
+PieceBoard.prototype.getNFloors = function() {
+	return this.n_floors;
+}
+
 PieceBoard.prototype.display = function () {
 
 	var scaling_factor = 5/7;

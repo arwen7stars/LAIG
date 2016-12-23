@@ -35,17 +35,17 @@
     
        <omni id="defOmni" enabled="1" >
             <location x="30" y="30" z="30" w="1" />
-			<ambient r="0.5" g="0.5" b="0.5" a="1" />
-			<diffuse r="0.6" g="0.6" b="0.6" a="1" />
-			<specular r="0.5" g="0.5" b="0.5" a="1" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </omni>
 
          <spot id="defSpot1" enabled="1" angle="0.4" exponent="1">
             <target x="0" y="0" z="0" />
             <location x="9" y="15" z="3" />
 			<ambient r="1" g="1" b="1" a="1.0" />
-			<diffuse r="1" g="1" b="0" a="1" />
-			<specular r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </spot>
 
       
@@ -53,8 +53,8 @@
             <target x="0" y="0" z="0" />
             <location x="15" y="0" z="3" />
 			<ambient r="1" g="1" b="1" a="1" />
-			<diffuse r="1" g="1" b="0" a="1" />
-			<specular r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </spot>
 
         
@@ -62,8 +62,8 @@
             <target x="0" y="1" z="0" />
             <location x="0" y="0" z="15" />
 			<ambient r="1" g="1" b="1" a="1" />
-			<diffuse r="1" g="1" b="0" a="1" />
-			<specular r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </spot>
       
 		
@@ -151,6 +151,10 @@
         	<plane dimX="3" dimY="2" partsX="10" partsY="7"/>   
         </primitive>
 
+        <primitive id="time_counter">
+			<time_counter/>
+        </primitive>
+
         <primitive id="patch">
         	<patch orderU="2" orderV="2" partsU="6" partsV="6" >
 				<controlpoint x="1" y="0" z="2" />
@@ -193,10 +197,29 @@
             <children>
             	<componentref id="carpet" />
                 <componentref id="table" />
+                <componentref id="timecounter" />
             </children>   
         </component>
 
-        <component id = "carpet">
+        <component id = "timecounter">
+			<transformation>
+				<translate x="8" y="2.65" z="1.3" />
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="-45" />
+			</transformation>
+
+			<materials>
+                <material id="sea" />
+            </materials>
+                    
+            <texture id="carpet" />
+            
+            <children>
+                <primitiveref id="time_counter" /> 
+            </children> 
+        </component>
+
+	<component id = "carpet">
 			<transformation>
 				<rotate axis="x" angle="90" />
 				<rotate axis="y" angle="180" />

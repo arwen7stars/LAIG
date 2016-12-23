@@ -73,6 +73,15 @@ XMLscene.prototype.init = function (application) {
 	this.increase = false;
 	this.decrease = false;
 
+	this.game_time = 0;
+	this.total_seconds = 0;
+	this.seconds = 0;
+	this.minutes = 0;
+
+	this.one_second = 0;
+
+	this.time_counter = new TimeCounter(this, Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+
 	this.setPickEnabled(true);
 };
 
@@ -90,17 +99,36 @@ XMLscene.prototype.initCameras = function () {
 XMLscene.prototype.update = function(currTime) {
 	if(this.graph.loadedOk){
 
-		/*for(var i = 0; i < this.graph.animations_list.length; i++){
+		var rootVector = [];
+		rootVector.push(this.graph.component_list[0]);
+
+		// nota: updatePeriod esta em milisegundos
+
+		this.game_time++;
+		
+		this.one_second++;
+		var one_second = this.one_second * (this.updatePeriod/1000);
+		
+		this.total_seconds = Math.floor(this.game_time * (this.updatePeriod/1000));
+		this.seconds = this.total_seconds % 60;
+		this.minutes = Math.floor((this.total_seconds % 3600) / 60);
+
+		if(one_second == 1){	
+			this.updateTimeCounter(rootVector);
+			this.one_second = 0;
+		}
+
+		for(var i = 0; i < this.graph.animations_list.length; i++){
 
 			if(this.graph.animations_list[i][1] instanceof MyLinearAnimation){
 				this.graph.animations_list[i][1].update(currTime);
 			}
 			if(this.graph.animations_list[i][1] instanceof MyCircularAnimation){
-	console.log("----------ANTES UPDATE");
+	//console.log("----------ANTES UPDATE");
 				this.graph.animations_list[i][1].update(currTime);
 			}
 
-		}*/
+		}
 			if(this.col >= 1 || this.lin >= 0){
 				if(this.first > 0){
 					console.log("LINE DEST " + this.lin);
@@ -174,6 +202,9 @@ XMLscene.prototype.update = function(currTime) {
 			}
 
 	}
+
+
+
 	/*if(this.su < (this.du-1.0)){
 		this.su += 1.0;
 	} else if((this.su == (this.du-1.0)) && (this.sv < (this.dv-1.0))){
@@ -187,6 +218,39 @@ XMLscene.prototype.update = function(currTime) {
 	this.chessboard.setPosition(this.su, this.sv);
 	this.chessboard.updatePosition();*/
 };
+
+XMLscene.prototype.updateTimeCounter = function(list) {
+	var nComp = list.length;
+	var compAtual;
+
+	for(var i = 0; i < nComp; i++){ //percorrer a lista para tratar de children e primitives
+		compAtual = list[i];
+		var nPrim = compAtual.getPrimitiveIDs().length;
+		if(nPrim > 0){ // mandar as primitivas para display
+
+			var primitives = this.getPrimitives(compAtual);
+
+			var nPrim = primitives.length;						// tamanho das primitivas do no
+
+			for(var j = 0; j < nPrim; j++){
+				console.log("TYPE: " + primitives[j].getType());
+
+				if(primitives[j].getType() == "time_counter"){
+					
+					primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+				}
+			}
+				
+		}
+
+		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
+		if(children.length > 0){
+
+			this.updateTimeCounter(children);
+		}
+
+	}
+}
 
 XMLscene.prototype.getCamFromGraph = function() {
 	this.views = [];
@@ -342,6 +406,8 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
+		//this.time_counter.display();
+		
 		for(var i = 0; i < this.graph.lights_list.length; i++){
 			eval("var enabled = this."+this.graph.lights_list[i].id);
 
