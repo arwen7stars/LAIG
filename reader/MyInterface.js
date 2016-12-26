@@ -50,11 +50,11 @@ MyInterface.prototype.processKeyboard = function(event) {
 	{
 		case (109):	// m
 		  console.log("m pushed");
-		  this.scene.changeCamera();
+		  this.scene.playPerspectiveAnimation();
 		  break;
 		case(77): // M
 		  console.log("M pushed");
-		  this.scene.changeCamera();
+		  this.scene.playPerspectiveAnimation();
 		  break;
 	};
 };

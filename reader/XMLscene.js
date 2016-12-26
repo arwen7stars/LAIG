@@ -1,6 +1,7 @@
 
 function XMLscene() {
     CGFscene.call(this);
+	this.allowMoveCamera = false;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -17,31 +18,16 @@ XMLscene.prototype.logPicking = function ()
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
-				var obj = this.pickResults[i][0];
-				if (obj)
-				{
-					var customId = this.pickResults[i][1];				
-					console.log("Picked object: " + obj + ", with pick id " + customId);
-
-					if(customId < 100){
-						this.col = Math.floor(customId/10);
-						this.lin = customId % 10;
-
-						console.log("LINHA " + this.lin);
-						console.log("COLUNA " + this.col);
-					} else if (customId < 200){
-						this.first = customId % 100;
-						console.log("FIRST " + this.first);
-					} else {
-						this.second = customId % 200;
-						console.log("SECOND " + this.second);
-					}
-				}
+				this.game.picking(this.pickResults[i][0], this.pickResults[i][1]);
 			}
 			this.pickResults.splice(0,this.pickResults.length);
 		}		
 	}
 }
+
+XMLscene.prototype.playPerspectiveAnimation = function() {
+	this.graph.perspAnimations.activate();
+};
 
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
@@ -61,15 +47,6 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(updatePeriod); //100 msec
 
-	this.lin = -1;
-	this.col = -1;
-
-	this.first = -1;
-	this.second = -1;
-
-	this.actualColumn = -1;
-	this.actualLine = -1;
-
 	this.increase = false;
 	this.decrease = false;
 
@@ -85,6 +62,77 @@ XMLscene.prototype.init = function (application) {
 	this.setPickEnabled(true);
 };
 
+XMLscene.prototype.updateTimeCounter = function(list) {
+	var nComp = list.length;
+	var compAtual;
+
+	for(var i = 0; i < nComp; i++){ //percorrer a lista para tratar de children e primitives
+		compAtual = list[i];
+		var nPrim = compAtual.getPrimitiveIDs().length;
+		if(nPrim > 0){ // mandar as primitivas para display
+
+			var primitives = this.getPrimitives(compAtual);
+
+			var nPrim = primitives.length;						// tamanho das primitivas do no
+
+			for(var j = 0; j < nPrim; j++){
+
+				if(primitives[j].getPrimitive() instanceof TimeCounter){
+					primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+				}
+			}
+				
+		}
+
+		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
+		if(children.length > 0){
+
+			this.updateTimeCounter(children);
+		}
+	}
+}
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}
+
+XMLscene.prototype.getBoardFromGraph = function(list) {
+	var nComp = list.length;
+	var compAtual;
+
+	for(var i = 0; i < nComp; i++){ //percorrer a lista para tratar de children e primitives
+		compAtual = list[i];
+		var nPrim = compAtual.getPrimitiveIDs().length;
+		if(nPrim > 0){ // mandar as primitivas para display
+
+			var primitives = this.getPrimitives(compAtual);
+
+			var nPrim = primitives.length;						// tamanho das primitivas do no
+
+			for(var j = 0; j < nPrim; j++){
+
+				if(primitives[j].getPrimitive() instanceof MyBoard){
+					this.board = primitives[j].getPrimitive();
+					return;
+				}
+			}
+				
+		}
+
+		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
+		if(children.length > 0){
+
+			this.getBoardFromGraph(children);
+		}
+
+	}
+}
+
 XMLscene.prototype.initLights = function () {
 
 	this.lights[0].setPosition(2, 3, 3, 1);
@@ -98,6 +146,7 @@ XMLscene.prototype.initCameras = function () {
 
 XMLscene.prototype.update = function(currTime) {
 	if(this.graph.loadedOk){
+		this.graph.perspAnimations.update(currTime);
 
 		var rootVector = [];
 		rootVector.push(this.graph.component_list[0]);
@@ -115,6 +164,7 @@ XMLscene.prototype.update = function(currTime) {
 
 		if(one_second == 1){	
 			this.updateTimeCounter(rootVector);
+
 			this.one_second = 0;
 		}
 
@@ -128,129 +178,14 @@ XMLscene.prototype.update = function(currTime) {
 				this.graph.animations_list[i][1].update(currTime);
 			}
 
-		}
-			if(this.col >= 1 || this.lin >= 0){
-				if(this.first > 0){
-					console.log("LINE DEST " + this.lin);
-					console.log("COLUMN DEST " + this.col);
-					this.actualColumn = this.graph.board.getFirstPieces()[this.first].getColumn();
-					this.actualLine = this.graph.board.getFirstPieces()[this.first].getLine();
-
-					if( this.actualColumn < this.col){
-						this.actualColumn += 0.1;
-
-						console.log("ACTUAL LINE " + this.actualLine);
-						console.log("ACTUAL COLUMN " + this.actualColumn);
-
-						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
-						this.increase = true;
-					} else if(this.actualColumn > this.col){
-						this.actualColumn -= 0.1;
-
-						console.log("ACTUAL LINE " + this.actualLine);
-						console.log("ACTUAL COLUMN " + this.actualColumn);
-
-						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
-						this.decrease = true;
-					}
-
-					if( this.actualLine < this.lin){
-						this.actualLine += 0.1;
-			
-						console.log("ACTUAL COLUMN " + this.actualColumn);
-						console.log("ACTUAL LINE " + this.actualLine);
-
-						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
-						this.increase = true;
-					} else if(this.actualLine > this.lin){
-						this.actualLine -= 0.1;
-						
-						console.log("ACTUAL LINE " + this.actualLine);
-						console.log("ACTUAL COLUMN " + this.actualColumn);
-
-						this.graph.board.getFirstPieces()[this.first].movePiece(this.actualColumn,this.actualLine);
-						this.decrease = true;
-
-					}
-
-					if(this.increase){
-						if(Math.round(this.actualColumn+0.5) == (this.col+1) && Math.round(this.actualLine+0.5) == (this.lin+1)){
-							this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
-							this.lin = -1;
-							this.col = -1;
-							this.first = -1;
-							this.increase = false;
-						}
-					} else if(this.decrease){
-
-						if(Math.floor(this.actualColumn-0.1) == (this.col-1) && Math.floor(this.actualLine-0.1) == (this.lin-1)){
-							this.graph.board.getFirstPieces()[this.first].movePiece(this.col,this.lin);
-							this.lin = -1;
-							this.col = -1;
-							this.first = -1;
-							this.decrease = false;
-						}
-					}
-										
-
-				} else if (this.second > 0){
-					this.graph.board.getSecondPieces()[this.second].movePiece(this.col,this.lin);
-					this.second = -1;
-					this.lin = -1;
-					this.col = -1;
-				}
+			if(this.graph.animations_list[i][1] instanceof MyCircularAnimation){
+			//console.log("----------ANTES UPDATE");
+				this.graph.animations_list[i][1].update(currTime);
 			}
 
+		}
 	}
-
-
-
-	/*if(this.su < (this.du-1.0)){
-		this.su += 1.0;
-	} else if((this.su == (this.du-1.0)) && (this.sv < (this.dv-1.0))){
-		this.su = 0.0;
-		this.sv += 1.0;
-	} else if((this.su == (this.du-1.0)) && (this.sv == (this.dv-1.0))){
-		this.su = 0;
-		this.sv = 0;
-	}
-
-	this.chessboard.setPosition(this.su, this.sv);
-	this.chessboard.updatePosition();*/
 };
-
-XMLscene.prototype.updateTimeCounter = function(list) {
-	var nComp = list.length;
-	var compAtual;
-
-	for(var i = 0; i < nComp; i++){ //percorrer a lista para tratar de children e primitives
-		compAtual = list[i];
-		var nPrim = compAtual.getPrimitiveIDs().length;
-		if(nPrim > 0){ // mandar as primitivas para display
-
-			var primitives = this.getPrimitives(compAtual);
-
-			var nPrim = primitives.length;						// tamanho das primitivas do no
-
-			for(var j = 0; j < nPrim; j++){
-				console.log("TYPE: " + primitives[j].getType());
-
-				if(primitives[j].getType() == "time_counter"){
-					
-					primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
-				}
-			}
-				
-		}
-
-		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
-		if(children.length > 0){
-
-			this.updateTimeCounter(children);
-		}
-
-	}
-}
 
 XMLscene.prototype.getCamFromGraph = function() {
 	this.views = [];
@@ -349,11 +284,37 @@ XMLscene.prototype.getLightsFromGraph = function () {
 
 };
 
-
-XMLscene.prototype.changeCamera = function() {
+XMLscene.prototype.getNextPerspective = function (){
 	this.curr_cam = (this.curr_cam + 1) % this.views.length;
 	this.camera = this.views[this.curr_cam];
-	this.interface.setActiveCamera(this.camera);
+	return this.views[this.curr_cam];
+}
+
+XMLscene.prototype.setCamera = function(perspective) {
+	if (this.allowMoveCamera === false) {
+		var angle = parseFloat(perspective.angle) * Math.PI/180;
+		var near = parseFloat(perspective.near);
+		var far = parseFloat(perspective.far);
+
+		var fromX = parseFloat(perspective.from_x);
+		var fromY = parseFloat(perspective.from_y);
+		var fromZ = parseFloat(perspective.from_z);
+
+		var toX = parseFloat(perspective.to_x);
+		var toY = parseFloat(perspective.to_y);
+		var toZ = parseFloat(perspective.to_z);
+		
+		this.camera = new CGFcamera(angle, near, far,
+			vec3.fromValues(fromX, fromY, fromZ),
+			vec3.fromValues(toX, toY, toZ));
+	} else {
+		this.interface.setActiveCamera(this.camera);
+	}
+};
+
+
+XMLscene.prototype.setNextCamera = function() {
+	this.setCamera(this.getNextPerspective());
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -374,6 +335,12 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.getTexturesAppearance();
     this.getMaterialsAppearance();
     this.getLightsFromGraph();
+	
+	var rootVector = [];
+	rootVector.push(this.graph.component_list[0]);
+	this.getBoardFromGraph(rootVector);
+
+	this.game = new Game(this, this.board);
 };
 
 XMLscene.prototype.display = function () {
@@ -407,6 +374,8 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		//this.time_counter.display();
+
+		this.graph.perspAnimations.apply(this);
 		
 		for(var i = 0; i < this.graph.lights_list.length; i++){
 			eval("var enabled = this."+this.graph.lights_list[i].id);

@@ -31,10 +31,12 @@ function MyBoard(scene, size_casa, first_player) {
 
  	this.setInitialBoard();
 
- 	this.board_array = this.createArray(9,9);
+ 	this.board_array;
+ 	this.board_string;
 
- 	this.boardToArray();
- 	this.boardToString();
+ 	this.board_array = this.boardToArray(this.first_pieces, this.second_pieces);
+ 	this.board_string = this.boardToString();
+
  };
 
 MyBoard.prototype = Object.create(CGFobject.prototype);
@@ -46,6 +48,10 @@ MyBoard.prototype.getFirstPieces = function () {
 
 MyBoard.prototype.getSecondPieces = function () {
 	return this.second_pieces;
+}
+
+MyBoard.prototype.getBoard = function () {
+	return this.board_string;
 }
 
 MyBoard.prototype.setInitialBoard = function () {
@@ -78,31 +84,32 @@ MyBoard.prototype.setInitialBoard = function () {
 }
 
 MyBoard.prototype.boardToString = function () {
-	this.board_string = '[';
+	board_string = '[';
 
 	for(var i = 0; i < this.board_array.length;i++){
-		this.board_string += '[';
+		board_string += '[';
 
 		for(var j = 0; j < this.board_array.length; j++){
-			this.board_string += this.board_array[i][j];
+			board_string += this.board_array[i][j];
 			if(j < this.board_array.length - 1)
-				this.board_string += ',';
+				board_string += ',';
 		}
 
 		if(i < this.board_array.length - 1){
-			this.board_string += '],';
+			board_string += '],';
 		}
 	}
 
-	this.board_string += ']]';
+	return board_string += ']]';
 	
 }
 
 MyBoard.prototype.boardToArray = function () {
 
+	var board_array = this.createArray(9,9);
 	for(var i = 0; i < 9; i++){
 		for(var j = 0; j < 9; j++){
-			this.board_array[i][j] = 'empty';
+			board_array[i][j] = 'empty';
 		}
 	}
 
@@ -112,11 +119,11 @@ MyBoard.prototype.boardToArray = function () {
 		var line = this.first_pieces[i].getLine();
 
 		if(n_floors == 3){
-			this.board_array[column][line] = '3-red';
+			board_array[column][line] = '3-red';
 		} else if(n_floors == 2){
-			this.board_array[column][line] = '2-red';
+			board_array[column][line] = '2-red';
 		} else{
-			this.board_array[column][line] = '1-red';
+			board_array[column][line] = '1-red';
 		}
 	}
 
@@ -126,14 +133,15 @@ MyBoard.prototype.boardToArray = function () {
 		var line = this.second_pieces[i].getLine();
 
 		if(n_floors == 3){
-			this.board_array[column][line] = '3-white';
+			board_array[column][line] = '3-white';
 		} else if(n_floors == 2){
-			this.board_array[column][line] = '2-white';
+			board_array[column][line] = '2-white';
 		} else{
-			this.board_array[column][line] = '1-white';
+			board_array[column][line] = '1-white';
 		}
 	}
-	
+
+	return board_array;
 }
 
 MyBoard.prototype.createArray = function(length) {
@@ -148,6 +156,8 @@ MyBoard.prototype.createArray = function(length) {
     return arr;
 }
 
+
+
 MyBoard.prototype.displayPieces = function () {
 
 	for(i = 0; i < this.first_pieces.length; i++){
@@ -156,7 +166,7 @@ MyBoard.prototype.displayPieces = function () {
 		var line = this.first_pieces[i].getLine();
 		var column = this.first_pieces[i].getColumn();
 
-		this.scene.translate((column+1)*this.size_casa, line*this.size_casa, 0);
+		this.scene.translate((column+1)*this.size_casa, line*this.size_casa, -0.01);
 		this.scene.registerForPick(100+i, this.first_pieces[i]);
 		this.first_pieces[i].display();
 
@@ -169,15 +179,15 @@ MyBoard.prototype.displayPieces = function () {
 		var line = this.second_pieces[i].getLine();
 		var column = this.second_pieces[i].getColumn();
 
-		this.scene.translate((column+1)*this.size_casa, line*this.size_casa, 0);
+		this.scene.translate((column+1)*this.size_casa, line*this.size_casa, -0.01);
 		this.scene.registerForPick(200+i, this.second_pieces[i]);
 		this.second_pieces[i].display();
 
 		this.scene.popMatrix();
 	}
 
-	this.boardToArray();
- 	this.boardToString();
+	this.board_array = this.boardToArray();
+ 	this.board_string = this.boardToString();
 
 }
 
@@ -191,13 +201,11 @@ MyBoard.prototype.display = function () {
         for(var j = 0; j < 9; j++){
             this.scene.pushMatrix();
 			this.texture.bind(0);
-            this.scene.translate(0, j*this.size_casa,0);
+            this.scene.translate(0, j*this.size_casa,-0.01);
             this.scene.registerForPick(10*i+j, this.picking_objects[i][j]);
 
             this.picking_objects[i][j].display();
             this.scene.popMatrix();
         }
     }
-
-    
  };

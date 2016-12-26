@@ -415,6 +415,10 @@ MySceneGraph.prototype.parseAnimations = function(rootElement){
 
 	this.animations_list=[]; //[id, MyAnimation]
 
+	var arrayPerspAnimations = [];
+	// declare aux array for pers animations
+	var arrayPerspAnimationsInfo = [];
+
 	var nAnimations=animations_ini[0].children.length;
 
 	for(var i=0;i<nAnimations;i++){
@@ -460,10 +464,39 @@ MySceneGraph.prototype.parseAnimations = function(rootElement){
 				
 				console.log("Leu circular animation: center " + centerCoords + " radius "+radius+" startang "+startang+ " rotang " + rotang);
 			
-		}
+		} else if (animationType === 'perspective') {
 
-		var vecIdAnimacao = [animationID, animation]
-		this.animations_list.push(vecIdAnimacao);
+			var clock = this.reader.getBoolean(animationRef, 'clock', 1);
+			var nPerspectiveRef = animationRef.children.length;
+
+			var arrayPersp = [];
+			
+			for (var j = 0; j < nPerspectiveRef; j++) {
+				var perspRefTag = animationRef.children[j];
+				var perspId = this.reader.getString(perspRefTag, 'id', 1);
+				var persp;
+				
+				for(var i = 0; i < this.views_list.length; i++){
+					if(this.views_list[i].id == perspId){
+						persp = this.views_list[i];
+					}
+				}
+				arrayPerspAnimations.push(persp);
+				arrayPerspAnimationsInfo.push(animationID);
+				arrayPerspAnimationsInfo.push(animationSpan);
+				arrayPerspAnimationsInfo.push(animationSpan);
+				arrayPerspAnimationsInfo.push(clock);
+			}
+		}
+		
+		if (animationType == 'perspective'){
+			console.log("PERSPECTIVE " + arrayPerspAnimationsInfo[0]);
+			
+			this.perspAnimations = new perspectiveAnimation(arrayPerspAnimationsInfo[0], arrayPerspAnimationsInfo[1], arrayPerspAnimationsInfo[2], arrayPerspAnimationsInfo[3], arrayPerspAnimations[0], arrayPerspAnimations[1]);
+		} else {
+			var vecIdAnimacao = [animationID, animation];
+			this.animations_list.push(vecIdAnimacao);
+		}
 
 		
 	}

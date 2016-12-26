@@ -2,7 +2,9 @@
 :-use_module(library(lists)).
 :-use_module(library(codesio)).
 
-:- include('oshi.pl').
+:- include('logic.pl').
+:- include('score.pl').
+:- include('display.pl')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%                                        Server                                                   %%%%
@@ -104,11 +106,13 @@ print_header_line(_).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Require your Prolog Files here
-
-parse_input(game, InitialBoard) :-
-	board(InitialBoard, inicial),
-	takeTurn(InitialBoard, red).
 	
+parse_input(displayBoard(B)):-
+	write(B),
+	displayBoard(B).
+
+
+
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 

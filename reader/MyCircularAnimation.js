@@ -24,6 +24,7 @@ function MyCircularAnimation(id, span, type, center, radius, startang, rotang) {
 
     }
     this.angleTime.push(this.span);
+    this.finalPositionDrawn = false;
 
     this.lastAnimatedSecond = 0; //ultimo segundo animado
 
@@ -45,7 +46,7 @@ MyCircularAnimation.prototype.update = function(currTime){
         this.startTime = currTime;
         this.endTime = this.startTime + (this.span * 1000); // converter span em msec
     }
-
+    
     if(currTime > this.endTime){ //animacao acabou
 
         if(this.finalPositionDrawn == true){
@@ -114,18 +115,14 @@ console.log("----- NEXT " + prevSecond);
         var newMatrix = mat4.create();
 
         mat4.translate(newMatrix, newMatrix, [-this.center[0], -this.center[1], -this.center[2]]);
- //ESTOU A FAZER O RAIO EM X MAS NAO SEI SE E EM Z
         mat4.translate(newMatrix, newMatrix, [this.radius, 0, 0]);
 
         //rotacao
 
-/* O ANG INICIAL E EM RELACAO A XX? SE SIM DECOMENTAR ISTO
-mat4.rotateX(newMatrix, newMatrix, this.startang);
-*/
         mat4.rotateY(newMatrix, newMatrix, newAngle);
 
          //translacao + 
-         mat4.translate(newMatrix, newMatrix, [-this.radius, 0, 0]);
+        mat4.translate(newMatrix, newMatrix, [-this.radius, 0, 0]);
         mat4.translate(newMatrix, newMatrix, [this.center[0], this.center[1], this.center[2]]);
         
         this.matrix = newMatrix;

@@ -24,3 +24,21 @@ MyPerspective.prototype.setToPosition = function (x, y, z) {
     this.to_y = y;
     this.to_z = z;
 };
+
+MyPerspective.prototype.getFromPosition = function() {
+	return [this.from_x, this.from_y, this.from_z];
+}
+
+MyPerspective.prototype.getFromPosition = function() {
+	return [this.to_x, this.to_y, this.to_z];
+}
+
+MyPerspective.prototype.clone = function() {
+  // get ang in degree
+	var ang = this.angle * (180 / Math.PI);
+	var persp = new MyPerspective(this.id, this.near, this.far, ang);
+	persp.setFromPosition(this.from_x, this.from_y, this.from_z);
+	persp.setToPosition(this.to_x, this.to_y, this.to_z);
+
+	return persp;
+};

@@ -15,7 +15,7 @@
             <to x="0" y="0" z="0" />
         </perspective>
 
-       	<perspective id="view2" near="0.1" far="500" angle="0.4">
+       	<perspective id="view2" near="0.1" far="100" angle="0.4">
             <from x="3" y="40" z="0" />
             <to x="3" y="1" z="3" />
         </perspective>
@@ -125,6 +125,11 @@
     	</animation>
 
     	<animation id="circular1" span="2" type="circular" center="0 0 0" radius="2" startang="0" rotang="360" />
+
+    	<animation id="olaaa" span="3" type="perspective" clock="1">
+          <perspectiveref id="view0"/>
+          <perspectiveref id="view1"/>
+        </animation>
 
 
 	</animations>
