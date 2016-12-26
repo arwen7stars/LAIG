@@ -11,7 +11,8 @@ function Game(scene, board) {
 	this.actualColumn = -1;
 	this.actualLine = -1;
 
-	this.startGame();
+	//this.startGame();
+	
 }
 
 Game.prototype = Object.create(CGFobject.prototype);

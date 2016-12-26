@@ -1,5 +1,5 @@
 /**
- * MyInterface
+ * MyInterface 
  * @constructor
  */
 function MyInterface() {

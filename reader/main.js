@@ -17,6 +17,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyPerspective
 								'MySemiSphere.js','MyLamp.js', 'MyLinearAnimation.js', 'MyCircularAnimation.js','MyPatch.js',
 								'MyPlane.js', 'MyVehicle.js', 'MyChessboard.js', 'MyPiece.js','MyBoard.js', 'MyTopFloor.js',
 								'PieceBoard.js', 'MyQuad.js', 'MyUnitCubeQuad.js', 'TimeCounter.js', 'Game.js', 'PerspAnimation.js',
+								'MyHandler.js',
 main=function()
 {
 	// Standard application, scene and interface setup
@@ -43,6 +44,9 @@ main=function()
 	
 	// start
     app.run();
+
+
+    makeRequest();
 }
 
 ]);

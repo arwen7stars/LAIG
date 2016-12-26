@@ -25,6 +25,17 @@ function TimeCounter(scene, seconds_dec, seconds_uni, minutes_dec, minutes_uni) 
 
  	this.cube = new MyUnitCubeQuad(this.scene);
 
+ 	this.zero = new CGFtexture(this.scene, "./resources/00.png");
+	this.one = new CGFtexture(this.scene, "./resources/01.png");
+	this.two = new CGFtexture(this.scene, "./resources/02.png");
+	this.three = new CGFtexture(this.scene, "./resources/03.png");
+	this.four = new CGFtexture(this.scene, "./resources/04.png");
+	this.five = new CGFtexture(this.scene, "./resources/05.png");
+	this.six = new CGFtexture(this.scene, "./resources/06.png");
+	this.seven = new CGFtexture(this.scene, "./resources/07.png");
+	this.eight = new CGFtexture(this.scene, "./resources/08.png");
+	this.nine = new CGFtexture(this.scene, "./resources/09.png");
+
  	this.chooseTexture();
  };
 
@@ -34,86 +45,84 @@ TimeCounter.prototype.constructor = TimeCounter;
 TimeCounter.prototype.chooseTexture = function () {
 	
 	if(this.seconds_dec == 0)
- 		this.texture_sec_dec = new CGFtexture(this.scene, "./resources/00.png");
+ 		this.texture_sec_dec = this.zero;
  	else if(this.seconds_dec == 1)
- 		this.texture_sec_dec = new CGFtexture(this.scene, "./resources/01.png");
+ 		this.texture_sec_dec = this.one;
  	else if(this.seconds_dec == 2)
- 		this.texture_sec_dec = new CGFtexture(this.scene, "./resources/02.png");
+ 		this.texture_sec_dec = this.two
  	else if(this.seconds_dec == 3)
- 	 	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/03.png");
+ 	 	this.texture_sec_dec = this.three;
 	else if(this.seconds_dec == 4)
- 	 	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/04.png");
+ 	 	this.texture_sec_dec = this.four;
  	else if(this.seconds_dec == 5)
- 	 	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/05.png");
+ 	 	this.texture_sec_dec = this.five;
  	else if(this.seconds_dec == 6)
-	 	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/06.png");
+	 	this.texture_sec_dec = this.six;
 	else if(this.seconds_dec == 7)
-	  	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/07.png");
+	  	this.texture_sec_dec = this.seven;
 	else if(this.seconds_dec == 8)
-	  	this.texture_sec_dec = new CGFtexture(this.scene, "./resources/08.png");
-	else this.texture_sec_dec = new CGFtexture(this.scene, "./resources/09.png");
+	  	this.texture_sec_dec = this.eight;
+	else this.texture_sec_dec = this.nine;
 
-
-	
 	if(this.seconds_uni == 0)
- 		this.texture_sec_uni = new CGFtexture(this.scene, "./resources/00.png");
+ 		this.texture_sec_uni = this.zero;
  	else if(this.seconds_uni == 1)
- 		this.texture_sec_uni = new CGFtexture(this.scene, "./resources/01.png");
+ 		this.texture_sec_uni = this.one;
  	else if(this.seconds_uni == 2)
- 		this.texture_sec_uni = new CGFtexture(this.scene, "./resources/02.png");
+ 		this.texture_sec_uni = this.two;
  	else if(this.seconds_uni == 3)
- 	 	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/03.png");
+ 	 	this.texture_sec_uni = this.three;
 	else if(this.seconds_uni == 4)
- 	 	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/04.png");
+ 	 	this.texture_sec_uni = this.four;
  	else if(this.seconds_uni == 5)
- 	 	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/05.png");
+ 	 	this.texture_sec_uni = this.five;
  	else if(this.seconds_uni == 6)
-	 	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/06.png");
+	 	this.texture_sec_uni = this.six;
 	else if(this.seconds_uni == 7)
-	  	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/07.png");
+	  	this.texture_sec_uni = this.seven;
 	else if(this.seconds_uni == 8)
-	  	this.texture_sec_uni = new CGFtexture(this.scene, "./resources/08.png");
-	else this.texture_sec_uni = new CGFtexture(this.scene, "./resources/09.png");
+	  	this.texture_sec_uni = this.eight;
+	else this.texture_sec_uni = this.nine;
 
 		if(this.minutes_dec == 0)
- 		this.texture_min_dec = new CGFtexture(this.scene, "./resources/00.png");
+ 		this.texture_min_dec = this.zero;
  	else if(this.minutes_dec == 1)
- 		this.texture_min_dec = new CGFtexture(this.scene, "./resources/01.png");
+ 		this.texture_min_dec = this.one;
  	else if(this.minutes_dec == 2)
- 		this.texture_min_dec = new CGFtexture(this.scene, "./resources/02.png");
+ 		this.texture_min_dec = this.two;
  	else if(this.minutes_dec == 3)
- 	 	this.texture_min_dec = new CGFtexture(this.scene, "./resources/03.png");
+ 	 	this.texture_min_dec = this.three;
 	else if(this.minutes_dec == 4)
- 	 	this.texture_min_dec = new CGFtexture(this.scene, "./resources/04.png");
+ 	 	this.texture_min_dec = this.four;
  	else if(this.minutes_dec == 5)
- 	 	this.texture_min_dec = new CGFtexture(this.scene, "./resources/05.png");
+ 	 	this.texture_min_dec = this.five;
  	else if(this.minutes_dec == 6)
-	 	this.texture_min_dec = new CGFtexture(this.scene, "./resources/06.png");
+	 	this.texture_min_dec = this.six;
 	else if(this.minutes_dec == 7)
-	  	this.texture_min_dec = new CGFtexture(this.scene, "./resources/07.png");
+	  	this.texture_min_dec = this.seven;
 	else if(this.minutes_dec == 8)
-	  	this.texture_min_dec = new CGFtexture(this.scene, "./resources/08.png");
-	else this.texture_min_dec = new CGFtexture(this.scene, "./resources/09.png");
+	  	this.texture_min_dec = this.eight;
+	else this.texture_min_dec = this.nine;
 
 	if(this.minutes_uni == 0)
- 		this.texture_min_uni = new CGFtexture(this.scene, "./resources/00.png");
+ 		this.texture_min_uni = this.zero;
  	else if(this.minutes_uni == 1)
- 		this.texture_min_uni = new CGFtexture(this.scene, "./resources/01.png");
+ 		this.texture_min_uni = this.one;
  	else if(this.minutes_uni == 2)
- 		this.texture_min_uni = new CGFtexture(this.scene, "./resources/02.png");
+ 		this.texture_min_uni = this.two;
  	else if(this.minutes_uni == 3)
- 	 	this.texture_min_uni = new CGFtexture(this.scene, "./resources/03.png");
+ 	 	this.texture_min_uni = this.three;
 	else if(this.minutes_uni == 4)
- 	 	this.texture_min_uni = new CGFtexture(this.scene, "./resources/04.png");
+ 	 	this.texture_min_uni = this.four;
  	else if(this.minutes_uni == 5)
- 	 	this.texture_min_uni = new CGFtexture(this.scene, "./resources/05.png");
+ 	 	this.texture_min_uni = this.five;
  	else if(this.minutes_uni == 6)
-	 	this.texture_min_uni = new CGFtexture(this.scene, "./resources/06.png");
+	 	this.texture_min_uni = this.six;
 	else if(this.minutes_uni == 7)
-	  	this.texture_min_uni = new CGFtexture(this.scene, "./resources/07.png");
+	  	this.texture_min_uni = this.seven;
 	else if(this.minutes_uni == 8)
-	  	this.texture_min_uni = new CGFtexture(this.scene, "./resources/08.png");
-	else this.texture_min_uni = new CGFtexture(this.scene, "./resources/09.png");
+	  	this.texture_min_uni = this.eight;
+	else this.texture_min_uni = this.nine;
 
 }
 
