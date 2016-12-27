@@ -34,13 +34,21 @@ function MyBoard(scene, size_casa, first_player) {
  	this.board_array;
  	this.board_string;
 
- 	this.board_array = this.boardToArray(this.first_pieces, this.second_pieces);
+ 	this.board_array = this.boardToArray();
  	this.board_string = this.boardToString();
 
  };
 
 MyBoard.prototype = Object.create(CGFobject.prototype);
 MyBoard.prototype.constructor = MyBoard;
+
+MyBoard.prototype.getFirstPlayer = function() {
+	return this.first_player;
+}
+
+MyBoard.prototype.getSecondPlayer = function() {
+	return this.second_player;
+}
 
 MyBoard.prototype.getFirstPieces = function () {
 	return this.first_pieces;
@@ -59,27 +67,27 @@ MyBoard.prototype.setInitialBoard = function () {
 	// linhas - 0 a 8
 	// colunas - 1 a 9
 
-	this.first_pieces[0] = new PieceBoard(this.scene, 1, 1, 3, this.size_casa, this.first_player);
-	this.first_pieces[1] = new PieceBoard(this.scene, 1, 1, 4, this.size_casa, this.first_player);
-	this.first_pieces[2] = new PieceBoard(this.scene, 1, 1, 5, this.size_casa, this.first_player);
-	this.first_pieces[3] = new PieceBoard(this.scene, 1, 2, 4, this.size_casa, this.first_player);
+	this.first_pieces[0] = new PieceBoard(this.scene, 1, 1, 3, this.size_casa, this.first_player, true);
+	this.first_pieces[1] = new PieceBoard(this.scene, 1, 1, 4, this.size_casa, this.first_player, true);
+	this.first_pieces[2] = new PieceBoard(this.scene, 1, 1, 5, this.size_casa, this.first_player, true);
+	this.first_pieces[3] = new PieceBoard(this.scene, 1, 2, 4, this.size_casa, this.first_player, true);
 
-	this.first_pieces[4] = new PieceBoard(this.scene, 2, 1, 2, this.size_casa, this.first_player);
-	this.first_pieces[5] = new PieceBoard(this.scene, 2, 1, 6, this.size_casa, this.first_player);
+	this.first_pieces[4] = new PieceBoard(this.scene, 2, 1, 2, this.size_casa, this.first_player, true);
+	this.first_pieces[5] = new PieceBoard(this.scene, 2, 1, 6, this.size_casa, this.first_player, true);
 
-	this.first_pieces[6] = new PieceBoard(this.scene, 3, 0, 0, this.size_casa, this.first_player);
-	this.first_pieces[7] = new PieceBoard(this.scene, 3, 0, 8, this.size_casa, this.first_player);
+	this.first_pieces[6] = new PieceBoard(this.scene, 3, 0, 0, this.size_casa, this.first_player, true);
+	this.first_pieces[7] = new PieceBoard(this.scene, 3, 0, 8, this.size_casa, this.first_player, true);
 
-	this.second_pieces[0] = new PieceBoard(this.scene, 1, 7, 3, this.size_casa, this.second_player);
-	this.second_pieces[1] = new PieceBoard(this.scene, 1, 7, 4, this.size_casa, this.second_player);
-	this.second_pieces[2] = new PieceBoard(this.scene, 1, 7, 5, this.size_casa, this.second_player);
-	this.second_pieces[3] = new PieceBoard(this.scene, 1, 6, 4, this.size_casa, this.second_player);
+	this.second_pieces[0] = new PieceBoard(this.scene, 1, 7, 3, this.size_casa, this.second_player, false);
+	this.second_pieces[1] = new PieceBoard(this.scene, 1, 7, 4, this.size_casa, this.second_player, false);
+	this.second_pieces[2] = new PieceBoard(this.scene, 1, 7, 5, this.size_casa, this.second_player, false);
+	this.second_pieces[3] = new PieceBoard(this.scene, 1, 6, 4, this.size_casa, this.second_player, false);
 
-	this.second_pieces[4] = new PieceBoard(this.scene, 2, 7, 2, this.size_casa, this.second_player);
-	this.second_pieces[5] = new PieceBoard(this.scene, 2, 7, 6, this.size_casa, this.second_player);
+	this.second_pieces[4] = new PieceBoard(this.scene, 2, 7, 2, this.size_casa, this.second_player, false);
+	this.second_pieces[5] = new PieceBoard(this.scene, 2, 7, 6, this.size_casa, this.second_player, false);
 
-	this.second_pieces[6] = new PieceBoard(this.scene, 3, 8, 0, this.size_casa, this.second_player);
-	this.second_pieces[7] = new PieceBoard(this.scene, 3, 8, 8, this.size_casa, this.second_player);
+	this.second_pieces[6] = new PieceBoard(this.scene, 3, 8, 0, this.size_casa, this.second_player, false);
+	this.second_pieces[7] = new PieceBoard(this.scene, 3, 8, 8, this.size_casa, this.second_player, false);
 
 }
 
@@ -90,7 +98,9 @@ MyBoard.prototype.boardToString = function () {
 		board_string += '[';
 
 		for(var j = 0; j < this.board_array.length; j++){
+			board_string += "'";
 			board_string += this.board_array[i][j];
+			board_string += "'";
 			if(j < this.board_array.length - 1)
 				board_string += ',';
 		}
@@ -119,11 +129,11 @@ MyBoard.prototype.boardToArray = function () {
 		var line = this.first_pieces[i].getLine();
 
 		if(n_floors == 3){
-			board_array[column][line] = '3-red';
+			board_array[column][line] = '3-' + this.first_player;
 		} else if(n_floors == 2){
-			board_array[column][line] = '2-red';
+			board_array[column][line] = '2-' + this.first_player;
 		} else{
-			board_array[column][line] = '1-red';
+			board_array[column][line] = '1-' + this.first_player;
 		}
 	}
 
@@ -133,11 +143,11 @@ MyBoard.prototype.boardToArray = function () {
 		var line = this.second_pieces[i].getLine();
 
 		if(n_floors == 3){
-			board_array[column][line] = '3-white';
+			board_array[column][line] = '3-' + this.second_player;
 		} else if(n_floors == 2){
-			board_array[column][line] = '2-white';
+			board_array[column][line] = '2-' + this.second_player;
 		} else{
-			board_array[column][line] = '1-white';
+			board_array[column][line] = '1-' + this.second_player;
 		}
 	}
 

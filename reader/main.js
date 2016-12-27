@@ -44,9 +44,6 @@ main=function()
 	
 	// start
     app.run();
-
-
-    makeRequest();
 }
 
 ]);

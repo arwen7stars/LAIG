@@ -146,6 +146,7 @@ XMLscene.prototype.initCameras = function () {
 
 XMLscene.prototype.update = function(currTime) {
 	if(this.graph.loadedOk){
+		this.game.update();
 		this.graph.perspAnimations.update(currTime);
 
 		var rootVector = [];
