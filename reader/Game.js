@@ -241,6 +241,53 @@ Game.prototype.outOfBounds = function(column, line){
 
 }
 
+Game.prototype.getDirection = function(hor, vert){
+	var dir;
+	if(vert > 0)		// linha selecionada maior que linha atual
+		dir = "east";
+	else if (vert < 0)
+		dir = "west";
+	else if (hor > 0)	// coluna selecionada maior que coluna atual
+		dir = "south";
+	else if (hor < 0)
+		dir = "north";
+	
+	return dir;
+}
+
+Game.prototype.movePushedPiece = function(pushed_piece, hor, vert){
+		var new_line;
+		var new_column;
+		if(vert > 0){
+			new_line = pushed_piece.getLine()+1;
+			new_column = pushed_piece.getColumn();
+		}else if (vert < 0){
+			new_line = pushed_piece.getLine()-1;
+			new_column = pushed_piece.getColumn();
+		}else if (hor > 0){
+			new_line = pushed_piece.getLine();
+			new_column = pushed_piece.getColumn()+1;
+		} else if (hor < 0){
+			new_line = pushed_piece.getLine();
+			new_column = pushed_piece.getColumn()-1;
+		}
+
+		if(!this.outOfBounds(new_column, new_line))
+			pushed_piece.movePiece(new_column, new_line);
+		else{
+			var tmp_col = pushed_piece.getColumn();
+			var tmp_lin = pushed_piece.getLine();
+			var ind = this.getPieceIndex(pushed_piece.isFirstPiece(), tmp_col, tmp_lin);
+
+			if(pushed_piece.isFirstPiece()){
+				this.board.getFirstPieces().splice(ind, 1);
+			} else{
+				this.board.getSecondPieces().splice(ind, 1);
+			}
+
+		}
+}
+
 Game.prototype.playHumanTurn = async function(customId){
 		this.sel_column = Math.floor(customId/10);
 		this.sel_line = customId % 10;
@@ -254,23 +301,16 @@ Game.prototype.playHumanTurn = async function(customId){
 
 		if(valid_move && valid_push){
 console.log("MOVE IN PROGRESS - START");
-			var curr_line = this.sel_piece.getLine();
-			var curr_col = this.sel_piece.getColumn();
-			var size = this.sel_piece.getNFloors();
 			var push = false;
 
+			var curr_line = this.sel_piece.getLine();
+			var curr_col = this.sel_piece.getColumn();
+
+			var size = this.sel_piece.getNFloors();
 			var vert = this.sel_line - curr_line;
 			var hor = this.sel_column - curr_col;
 
-			var dir;
-			if(vert > 0)		// linha selecionada maior que linha atual
-				dir = "east";
-			else if (vert < 0)
-				dir = "west";
-			else if (hor > 0)	// coluna selecionada maior que coluna atual
-				dir = "south";
-			else if (hor < 0)
-				dir = "north";
+			var dir = this.getDirection(hor, vert);
 
 			var vert_abs = Math.abs(vert);
 			var hor_abs = Math.abs(hor);
@@ -293,46 +333,19 @@ console.log("MOVE IN PROGRESS - START");
 			console.log("PIECES " + pushed_pieces);
 			var tmp_str = pushed_pieces.substr(1, pushed_pieces.indexOf('|')-1);
 
-			if(tmp_str.length != 0){
-				push = true;
-				var res = tmp_str.split(",");
-				for(var j = 0; j < res.length; j++){
-					var coord = res[j].split("-");
-					console.log("COLUNA " + coord[0] + " LINHA " + coord[1]);
+			if(spaces > 1){
 
-					var pushed_piece = this.getPiece(this.sel_piece.isFirstPiece(), coord[0], coord[1]);
+				if(tmp_str.length != 0){
+					push = true;
+					var res = tmp_str.split(",");
+					for(var j = 0; j < res.length; j++){
+						var coord = res[j].split("-");
+						console.log("COLUNA " + coord[0] + " LINHA " + coord[1]);
 
-					var new_line;
-					var new_column;
-					if(vert > 0){
-						new_line = pushed_piece.getLine()+1;
-						new_column = pushed_piece.getColumn();
-					}else if (vert < 0){
-						new_line = pushed_piece.getLine()-1;
-						new_column = pushed_piece.getColumn();
-					}else if (hor > 0){
-						new_line = pushed_piece.getLine();
-						new_column = pushed_piece.getColumn()+1;
-					} else if (hor < 0){
-						new_line = pushed_piece.getLine();
-						new_column = pushed_piece.getColumn()-1;
-					}
-
-					if(!this.outOfBounds(new_column, new_line))
-						pushed_piece.movePiece(new_column, new_line);
-					else{
-						var tmp_col = pushed_piece.getColumn();
-						var tmp_lin = pushed_piece.getLine();
-						var ind = this.getPieceIndex(pushed_piece.isFirstPiece(), tmp_col, tmp_lin);
-
-						if(pushed_piece.isFirstPiece()){
-							this.board.getFirstPieces().splice(ind, 1);
-						} else{
-							this.board.getSecondPiecesPieces().splice(ind, 1);
-						}
+						var pushed_piece = this.getPiece(this.sel_piece.isFirstPiece(), coord[0], coord[1]);
+						this.movePushedPiece(pushed_piece, hor, vert);
 
 					}
-
 				}
 
 				if(vert > 0){
@@ -371,38 +384,7 @@ console.log("MOVE IN PROGRESS - START");
 							console.log("COLUNA " + coord[0] + " LINHA " + coord[1]);
 
 							var pushed_piece = this.getPiece(this.sel_piece.isFirstPiece(), coord[0], coord[1]);
-
-							var new_line;
-							var new_column;
-							if(vert > 0){
-								new_line = pushed_piece.getLine()+1;
-								new_column = pushed_piece.getColumn();
-							}else if (vert < 0){
-								new_line = pushed_piece.getLine()-1;
-								new_column = pushed_piece.getColumn();
-							}else if (hor > 0){
-								new_line = pushed_piece.getLine();
-								new_column = pushed_piece.getColumn()+1;
-							} else if (hor < 0){
-								new_line = pushed_piece.getLine();
-								new_column = pushed_piece.getColumn()-1;
-							}
-							if(!this.outOfBounds(new_column, new_line))
-								pushed_piece.movePiece(new_column, new_line);
-							else{
-								var tmp_col = pushed_piece.getColumn();
-								var tmp_lin = pushed_piece.getLine();
-								var ind = getPieceIndex(pushed_piece.isFirstPiece(), tmp_col, tmp_lin);
-
-								if(pushed_piece.isFirstPiece()){
-									this.board.getFirstPieces.splice(ind, 1);
-								} else{
-									this.board.getSecondPiecesPieces.splice(ind, 1);
-								}
-
-							}
-							
-
+							this.movePushedPiece(pushed_piece, hor, vert);
 						}
 					}
 
