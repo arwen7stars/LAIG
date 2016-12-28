@@ -321,7 +321,7 @@ console.log("MOVE IN PROGRESS - START");
 			else spaces = hor_abs;
 
 			var boardString = this.board.getBoard();
-			var pushed_pieces = "";
+			pushed_pieces = "";
 
 			var requestString = `getPushedPieces(` + boardString + `,` + curr_col + `,` + curr_line + `,` + dir + `)`;
 			this.getPrologRequest(requestString, function(data) {
@@ -350,15 +350,11 @@ console.log("MOVE IN PROGRESS - START");
 
 				if(vert > 0){
 					curr_line = curr_line+1;
-					curr_col = curr_col;
 				}else if (vert < 0){
 					curr_line = curr_line-1;
-					curr_col = curr_col;
 				}else if (hor > 0){
-					curr_line = curr_line;
 					curr_col = curr_col+1;
 				} else if (hor < 0){
-					curr_line = curr_line;
 					curr_col = curr_col-1;
 				}
 
@@ -389,20 +385,16 @@ console.log("MOVE IN PROGRESS - START");
 					}
 
 					if(vert > 0){
-						new_line = curr_line+1;
-						new_column = curr_col;
+						curr_line = curr_line+1;
 					}else if (vert < 0){
-						new_line = curr_line-1;
-						new_column = curr_col;
+						curr_line = curr_line-1;
 					}else if (hor > 0){
-						new_line = curr_line;
-						new_column = curr_col+1;
+						curr_col = curr_col+1;
 					} else if (hor < 0){
-						new_line = curr_line;
-						new_column = curr_col-1;
+						curr_col = curr_col-1;
 					}
 
-					this.sel_piece.movePiece(new_column,new_line);
+					this.sel_piece.movePiece(curr_col,curr_line);
 				}
 
 			}
@@ -414,7 +406,7 @@ console.log("MOVE IN PROGRESS - START");
 			this.sel_column = -1;
 			this.turnOngoing = false;
 			this.board.updatePieceSelected(false);
-			//valid_move = false;
+			valid_move = false;
 			this.sel_first = -1;
 			this.sel_second = -1;
 		console.log("MOVE IN PROGRESS - END");
