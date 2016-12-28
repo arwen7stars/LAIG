@@ -1,9 +1,3 @@
-/** <module> Board Analysis Module
-
-This module analyzes the board.
-*/
-:- module(score, [getScore/2, equalScore/2, better/3, gameOver/2]).
-
 :- use_module(library(random)).
 
 /** getScore(+Board, -Score)

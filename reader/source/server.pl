@@ -14,6 +14,10 @@
 
 port(8081).
 
+board([['3-red','empty','empty','empty','empty','empty','empty','empty','3-white'],['empty','empty','empty','empty','empty','empty','empty','empty','empty'],['empty','2-red','empty','empty','empty','empty','empty','2-white','empty'],['empty','1-red','empty','empty','empty','empty','empty','1-white','empty'],['empty','1-red','1-red','empty','empty','empty','1-white','1-white','empty'],['empty','1-red','empty','empty','empty','empty','empty','1-white','empty'],['empty','2-red','empty','empty','empty','empty','empty','2-white','empty'],['empty','empty','empty','empty','empty','empty','empty','empty','empty'],['3-red','empty','empty','empty','empty','empty','empty','empty','3-white']], server
+).
+
+
 % Server Entry Point
 server :-
 	port(Port),
@@ -104,8 +108,8 @@ print_header_line(_).
 
 % Require your Prolog Files here
 
-:-include('oshi.pl').
 :-include('logic.pl').
+:-include('score.pl').
 
 isGameOver(Board, Answer) :-
 	gameOver(Board, draw),
@@ -129,7 +133,48 @@ checkMove(Row, Col, Dir, Spaces, Size, Answer) :-
 checkMove(_, _, _, _, _, Answer) :-
 	Answer = 'false'.
 
+pushedPieces(Board, Row, Col, Dir, Result) :-
+	getPiece(Board, Row-Col, Size-Team),
+	setPiece(Board, empty, Row-Col, TmpBoard),
+	getNewPosition(Row-Col, Dir, 1, X-Y),
+	pushedPieceAux(TmpBoard, Size-Team, X, Y, Dir, Size, Result, _).
+
+%Piece goes out of bounds	
+pushedPieceAux(InitialBoard, _, Row, Col, _, _, _, InitialBoard):-
+	\+getPiece(InitialBoard, Row-Col, _PushedPiece),
+	outOfBounds(Row-Col).
+
+pushedPieceAux(InitialBoard, Piece, Row, Col, _, _, _, FinalBoard):-
+	\+getPiece(InitialBoard, Row-Col, _PushedPiece),
+	setPiece(InitialBoard, Piece, Row-Col, FinalBoard).
+
+pushedPieceAux(Board, Piece, Row, Col, Dir, Size, [Pushed | Rest], FinalBoard) :-
+	Size > 0,
+	getPiece(Board, Row-Col, PushedPiece),
+	Pushed = Row-Col,
+	setPiece(Board, Piece, Row-Col, TmpBoard),
+	getNewPosition(Row-Col, Dir, 1, X-Y),
+	S is Size - 1,
+	pushedPieceAux(TmpBoard, PushedPiece, X, Y, Dir, S, Rest, FinalBoard).
+	
+getPushedPieces(Board, Row, Col, Dir, Answer):-
+	pushedPieces(Board, Row, Col, Dir, Result),
+	Answer = Result.	
+	
+getPushedPieces(_, _, _, _, Answer):-
+	Answer = 'no'.
+	
+checkPush(Board, Row, Col, Dir, Spaces, Player, Answer) :-
+	movePiece(Board, Row-Col, Dir, Spaces, Player, _, _),
+	Answer = 'true'.
+
+checkPush(_, _, _, _, _, _, Answer) :-
+	Answer = 'false'.
+
+
 parse_input(startGame, 'game may have started'):- game.
 parse_input(isTheGameOver(Board), Answer) :- isGameOver(Board, Answer).
 parse_input(checkMove(Row, Col, Dir, Spaces, Size), Answer) :- checkMove(Row, Col, Dir, Spaces, Size, Answer).
+parse_input(checkPush(Board, Row, Col, Dir, Spaces, Player), Answer) :- checkPush(Board, Row, Col, Dir, Spaces, Player, Answer).
+parse_input(getPushedPieces(Board, Row, Col, Dir), Answer) :- getPushedPieces(Board, Row, Col, Dir, Answer).
 parse_input(quit, goodbye).

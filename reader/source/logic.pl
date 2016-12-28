@@ -1,9 +1,3 @@
-/** <module> Movement Logic Module
-
-This module validates and moves a piece if the movement is valid.
-*/
-:- module(move, [getPiece/3, movePiece/7, movePiece/5]).
-
 :- use_module(library(lists)).
 
 /** movePiece(+InitialBoard, +Move, +Player, -FinalBoard, -NextPlayer)

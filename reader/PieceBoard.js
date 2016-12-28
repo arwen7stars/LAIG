@@ -9,6 +9,7 @@ function PieceBoard(scene, n_floors, lin, col, size_casa, type, first_piece) {
  	this.col = col;
  	this.size_casa = size_casa;
  	this.first_piece = first_piece;
+ 	this.type = type;
  	
 	this.piece = new MyPiece(this.scene, n_floors, type);
  };
@@ -31,6 +32,10 @@ PieceBoard.prototype.getLine = function() {
 
 PieceBoard.prototype.getNFloors = function() {
 	return this.n_floors;
+}
+
+PieceBoard.prototype.getType = function() {
+	return this.type;
 }
 
 PieceBoard.prototype.isFirstPiece = function() {

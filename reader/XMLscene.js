@@ -345,9 +345,6 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.display = function () {
-	this.logPicking();
-	this.clearPickRegistration();
-
 	// ---- BEGIN Background, camera and axis setup
 	
 	// Clear image and depth buffer everytime we update the scene
@@ -374,7 +371,7 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		//this.time_counter.display();
+		this.game.display();
 
 		this.graph.perspAnimations.apply(this);
 		
