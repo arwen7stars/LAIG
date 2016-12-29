@@ -1,7 +1,7 @@
 function MyCircularAnimation(id, span, type, center, radius, startang, rotang) {
 
     this.id=id;
-
+    
     this.span = span; //segundos
     this.center = center;
     this.radius = radius;
@@ -40,6 +40,22 @@ MyCircularAnimation.prototype.getMatrix = function(){
     return this.matrix;
 };
 
+MyCircularAnimation.prototype.getCurrentPosition = function(startang){ // retorna [x, z]
+    //console.log(this.newAngle);
+    if(this.firstAngle != undefined){
+        this.newAngle -= this.firstAngle;
+       // console.log("sub: " + this.firstAngle);
+        
+    }
+   // console.log("Y : " + this.radius * Math.sin(this.newAngle));
+   // console.log("X : " + this.radius * Math.cos(this.newAngle));
+   var ret = [];
+   ret.push(this.radius * Math.sin(this.newAngle)); // z?
+   ret.push(this.radius * Math.cos(this.newAngle+startang)); // x?
+   
+   return ret;
+};
+
 MyCircularAnimation.prototype.update = function(currTime){
 
     if(this.startTime == 0){
@@ -49,9 +65,8 @@ MyCircularAnimation.prototype.update = function(currTime){
     
     if(currTime > this.endTime){ //animacao acabou
 
-        if(this.finalPositionDrawn == true){
-            return;
-        } else { //desenhar a posicao final para o caso de currtime passar endtime antes que seja desenhada
+        if(this.finalPositionDrawn == false){
+            //desenhar a posicao final para o caso de currtime passar endtime antes que seja desenhada
                
             //translacao - (posicao inicial e depois raio)
             var newMatrix = mat4.create();
@@ -64,6 +79,7 @@ MyCircularAnimation.prototype.update = function(currTime){
     /* O ANG INICIAL E EM RELACAO A XX? SE SIM DECOMENTAR ISTO
     mat4.rotateX(newMatrix, newMatrix, this.startang);
     */
+            
             mat4.rotateY(newMatrix, newMatrix, this.rotang);
 
              //translacao + (raio e depois posicao inicial)
@@ -74,10 +90,7 @@ MyCircularAnimation.prototype.update = function(currTime){
 
             this.finalPositionDrawn = true;
         }
-    }
-
-
-    else{
+    } else{
 console.log("---------- ELSE");
         var tAnimation =  (currTime - this.startTime) / 1000; //instante onde esta a animacao (segundos)
         var nextSecond; // seguinte segundo a ser desenhado
@@ -105,9 +118,9 @@ console.log("----- NEXT " + prevSecond);
 
         //percentagem do intervalo onde se encontra o instante atual
         var travelPercentage = timeSinceLastSecond; // porque e sempre a percetagem num segundo
-        var newAngle = this.angleTime[prevSecond] + travelPercentage * this.anglePerSecond;
+        this.newAngle = this.angleTime[prevSecond] + travelPercentage * this.anglePerSecond;
 
-  console.log("newAngle " + newAngle + " this.angleTime[prevSecond] " + this.angleTime[prevSecond] + " travelPercentage " + travelPercentage);
+  console.log("newAngle " + this.newAngle + " this.angleTime[prevSecond] " + this.angleTime[prevSecond] + " travelPercentage " + travelPercentage);
        
         console.log("tempo de animacao = " + tAnimation + " percentagem = " + travelPercentage);
 
@@ -119,7 +132,7 @@ console.log("----- NEXT " + prevSecond);
 
         //rotacao
 
-        mat4.rotateY(newMatrix, newMatrix, newAngle);
+        mat4.rotateY(newMatrix, newMatrix, this.newAngle);
 
          //translacao + 
         mat4.translate(newMatrix, newMatrix, [-this.radius, 0, 0]);

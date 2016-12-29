@@ -1,7 +1,7 @@
 
 function XMLscene() {
     CGFscene.call(this);
-	this.allowMoveCamera = false;
+	this.activateCamera = false;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -17,17 +17,28 @@ XMLscene.prototype.logPicking = function ()
 {
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
-			for (var i=0; i< this.pickResults.length; i++) {
-				this.game.picking(this.pickResults[i][0], this.pickResults[i][1]);
+			if(this.menu.hasGameStarted()){
+				for (var i=0; i< this.pickResults.length; i++) {
+					this.game.picking(this.pickResults[i][0], this.pickResults[i][1]);
+				}
+				this.pickResults.splice(0,this.pickResults.length);
+			} else{
+				for (var i=0; i< this.pickResults.length; i++) {
+					this.menu.picking(this.pickResults[i][0], this.pickResults[i][1]);
+				}
+				this.pickResults.splice(0,this.pickResults.length);
 			}
-			this.pickResults.splice(0,this.pickResults.length);
 		}		
 	}
 }
 
-XMLscene.prototype.playPerspectiveAnimation = function() {
+XMLscene.prototype.playPerspAnimation = function() {
 	this.graph.perspAnimations.activate();
 };
+
+XMLscene.prototype.setNextPlayer = function(){
+	this.graph.perspAnimations.setNextPlayer();
+}
 
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
@@ -47,6 +58,8 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(updatePeriod); //100 msec
 
+	this.first_play = false;
+
 	this.increase = false;
 	this.decrease = false;
 
@@ -59,6 +72,8 @@ XMLscene.prototype.init = function (application) {
 
 	//this.time_counter = new TimeCounter(this, Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
 
+	this.menu = new Menu(this);
+	
 	this.setPickEnabled(true);
 };
 
@@ -135,13 +150,16 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 0.1, 100, vec3.fromValues(0, 0, 10), vec3.fromValues(0, 0, 0));
 };
 
 XMLscene.prototype.update = function(currTime) {
 	if(this.graph.loadedOk){
-		this.game.update();
-		this.graph.perspAnimations.update(currTime);
+		if(this.menu.hasGameStarted()){
+			this.game.update();
+			//for(var i = 0; i < this.graph.perspAnimations.length; i++)
+				this.graph.perspAnimations.update(currTime);
+		}
 
 		// nota: updatePeriod esta em milisegundos
 
@@ -209,8 +227,8 @@ XMLscene.prototype.getCamFromGraph = function() {
   		id = 0;
  		}
 
+	this.curr_cam = id;
 	this.camera = this.views[id];
-	this.curr_cam = i;
 	this.interface.setActiveCamera(this.camera);
 
 };
@@ -283,7 +301,7 @@ XMLscene.prototype.getNextPerspective = function (){
 }
 
 XMLscene.prototype.setCamera = function(perspective) {
-	if (this.allowMoveCamera === false) {
+	if (this.activateCamera === false) {
 		var angle = parseFloat(perspective.angle) * Math.PI/180;
 		var near = parseFloat(perspective.near);
 		var far = parseFloat(perspective.far);
@@ -296,9 +314,7 @@ XMLscene.prototype.setCamera = function(perspective) {
 		var toY = parseFloat(perspective.to_y);
 		var toZ = parseFloat(perspective.to_z);
 		
-		this.camera = new CGFcamera(angle, near, far,
-			vec3.fromValues(fromX, fromY, fromZ),
-			vec3.fromValues(toX, toY, toZ));
+		this.camera = new CGFcamera(angle, near, far, vec3.fromValues(fromX, fromY, fromZ), vec3.fromValues(toX, toY, toZ));
 	} else {
 		this.interface.setActiveCamera(this.camera);
 	}
@@ -322,7 +338,6 @@ XMLscene.prototype.onGraphLoaded = function ()
 {
 	this.setGlobalAmbientLight(this.graph.ambient[0],this.graph.ambient[1],this.graph.ambient[2],this.graph.ambient[3]);
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-    this.getCamFromGraph();
     this.enableTextures(true);
     this.getTexturesAppearance();
     this.getMaterialsAppearance();
@@ -335,9 +350,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	var rootVector = [];
 	rootVector.push(this.graph.component_list[0]);
 	this.getTimeCounter(rootVector);
-
-
-	this.game = new Game(this, this.board, 1, 1);
+	this.game = new Game(this, this.board);
 	this.game.setBoardScore(this.time_counter);
 };
 
@@ -357,7 +370,7 @@ XMLscene.prototype.display = function () {
 	this.applyViewMatrix();
 
 	// Draw axis
-	this.axis.display();
+	//this.axis.display();
 
 
 	this.setDefaultAppearance();
@@ -368,36 +381,49 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		this.game.display();
-
-		this.graph.perspAnimations.apply(this);
-		
 		for(var i = 0; i < this.graph.lights_list.length; i++){
 			eval("var enabled = this."+this.graph.lights_list[i].id);
 
 			if(enabled){
-    			this.lights[i].enable();
+				this.lights[i].enable();
 			} else {
 				this.lights[i].disable();
 			}
-			
+
 			this.lights[i].setVisible(true);
 			this.lights[i].update();
 		}
+		if(this.menu.hasGameStarted()){
 
-		var rootVector = [];
-		rootVector.push(this.graph.component_list[0]);
 
-		var matIni = mat4.create();
-		mat4.identity(matIni);
+			if(!this.first_play){
+		    	this.getCamFromGraph();
+				this.game.startGame(this.menu.getMode(), this.menu.getDifficulty());
+				
+				this.first_play = true;
+			}
 
-		var rootMaterial = this.graph.component_list[0].getMaterial();
-		var rootTexture = this.graph.component_list[0].getTexture();
 
-		
+			this.game.display();
 
-		this.displayComponents(rootVector, matIni, rootMaterial,rootTexture);
-	}
+			var rootVector = [];
+			rootVector.push(this.graph.component_list[0]);
+
+			var matIni = mat4.create();
+			mat4.identity(matIni);
+
+			var rootMaterial = this.graph.component_list[0].getMaterial();
+			var rootTexture = this.graph.component_list[0].getTexture();
+
+
+
+			this.displayComponents(rootVector, matIni, rootMaterial,rootTexture);
+
+		}else{
+			//this.camera = this.menu_cam;
+			this.menu.display();
+		}
+}
 
 }; 
 

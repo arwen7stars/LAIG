@@ -29,7 +29,7 @@ MyPerspective.prototype.getFromPosition = function() {
 	return [this.from_x, this.from_y, this.from_z];
 }
 
-MyPerspective.prototype.getFromPosition = function() {
+MyPerspective.prototype.getToPosition = function() {
 	return [this.to_x, this.to_y, this.to_z];
 }
 

@@ -3,15 +3,15 @@
     <scene root="root" axis_length="5" />
     
 	
-    <views default="view2" >
+    <views default="view1" >
 		
        	<perspective id="view1" near="0.1" far="100" angle="0.4">
-            <from x="3" y="40" z="10" />
+            <from x="3" y="40" z="30" />
             <to x="3" y="1" z="2" />
         </perspective>
 
        	<perspective id="view2" near="0.1" far="100" angle="0.4">
-            <from x="3" y="45" z="-10" />
+            <from x="3" y="40" z="-30" />
             <to x="3" y="1" z="2" />
         </perspective>
         
@@ -21,7 +21,7 @@
     <illumination doublesided="1" local="1" >
     
         <ambient r="0" g="0" b="0" a="1.0" />
-        <background r="0" g="0" b="0" a="1.0" />
+        <background r="0.93" g="0.97" b="1.0" a="1.0" />
         
     </illumination>
     
@@ -74,7 +74,11 @@
         <texture id="window" file="./resources/window.png" length_s="1" length_t="1" />
         <texture id="frame" file="./resources/frame.png" length_s="1" length_t="1" />
 		<texture id="boat" file="./resources/boat.png" length_s="1" length_t="1" />
-		<texture id="carpet" file="./resources/carpet.png" length_s="1" length_t="1" />
+		<texture id="grass" file="./resources/grass.jpg" length_s="1" length_t="1" />
+		<texture id="jp_tex" file="./resources/jp_tex.jpg" length_s="1" length_t="1" />
+		<texture id="ball" file="./resources/ball.png" length_s="1" length_t="1" />
+		<texture id="bamboo" file="./resources/bamboo.jpg" length_s="1" length_t="1" />
+		<texture id="boulder" file="./resources/boulder.jpg" length_s="1" length_t="1" />
     </textures>
 
     
@@ -121,7 +125,7 @@
 
     	<animation id="circular1" span="2" type="circular" center="0 0 0" radius="2" startang="0" rotang="360" />
 
-    	<animation id="olaaa" span="3" type="perspective" clock="1">
+    	<animation id="olaaa" span="3" type="perspective" clock="true">
           <perspectiveref id="view2"/>
           <perspectiveref id="view1"/>
         </animation>
@@ -150,6 +154,14 @@
         <primitive id="plane">
         	<plane dimX="3" dimY="2" partsX="10" partsY="7"/>   
         </primitive>
+
+        <primitive id="piece_red">
+        	<piece nFloors="3" type="red" />
+        </primitive>
+
+         <primitive id="piece_white">
+        	<piece nFloors="3" type="white" />
+       	 </primitive>
 
         <primitive id="time_counter">
 			<time_counter/>
@@ -195,34 +207,73 @@
             <texture id="none" />
             
             <children>
-            	<componentref id="carpet" />
+            	<componentref id="grass" />
                 <componentref id="table" />
-				<componentref id="timecounter" />
+                <componentref id="sustainer" />
+                <componentref id="timecounter" />
+                <componentref id="ball" />
             </children>   
         </component>
 
-	<component id = "carpet">
+        <component id = "ball">
+			<transformation>
+				<scale x="3" y="3" z="3" />
+				<translate x="-3" y="-1" z="0" />	
+			</transformation>
+
+			<materials>
+	
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="ball" />
+            
+            <children>
+                <primitiveref id="sphere" /> 
+            </children> 
+        </component>
+
+	<component id = "grass">
 			<transformation>
 				<rotate axis="x" angle="90" />
 				<rotate axis="y" angle="180" />
-				<scale x="50" y="50" z="50" />		
+				<scale x="60" y="60" z="60" />		
 				<translate x="-0.55" y="-0.45" z="-0.1" />
 			</transformation>
 
 			<materials>
-                <material id="sea" />
+                <material id="inherit" />
             </materials>
                     
-            <texture id="carpet" />
+            <texture id="grass" />
             
             <children>
                 <primitiveref id="rect" /> 
             </children> 
         </component>
 
+        <component id = "sustainer">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="180" />
+				<scale x="2" y="4" z="7" />		
+				<translate x="-5.8" y="0.5" z="-0.8" />
+			</transformation>
+
+			<materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="boat" />
+            
+            <children>
+                <primitiveref id="cylinder" /> 
+            </children> 
+        </component>
+
         <component id = "table">
 			<transformation>
-				<translate x="3" y="-6" z="-9" />
+				<translate x="4" y="-6" z="-10" />
 				<scale x="6" y="6" z="6" />
 			</transformation>
 
@@ -238,6 +289,7 @@
            	 	<componentref id="up_table" />
             </children> 
         </component>
+        
 
         <component id = "board">
 			<transformation>
@@ -487,16 +539,16 @@
 
 		<component id = "timecounter">
 			<transformation>
-				<translate x="8.3" y="2.3" z="1.8" />
+				<translate x="11.5" y="2.3" z="0.7" />
 				<rotate axis="y" angle="-90" />
-				<rotate axis="x" angle="-70" />
+				<rotate axis="x" angle="-90" />
 			</transformation>
 
 			<materials>
                 <material id="inherit" />
             </materials>
                     
-            <texture id="carpet" />
+            <texture id="inherit" />
             
             <children>
                 <primitiveref id="time_counter" /> 

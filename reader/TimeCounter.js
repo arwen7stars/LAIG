@@ -15,7 +15,7 @@ function TimeCounter(scene, first_score, second_score) {
  	this.texture_second_score;
 	
  	this.texture_colon = new CGFtexture(this.scene, "./resources/colon.png");
-	this.texture_bkg = new CGFtexture(this.scene, "./resources/texture.jpg");
+	this.texture_bkg = new CGFtexture(this.scene, "./resources/wood.png");
 	this.shader = new CGFshader(this.scene.gl, "shaders/shader.vert", "shaders/shader.frag");
 
  	this.plane_first_score = new MyPlane(this.scene,1,1,10,10);
@@ -150,7 +150,7 @@ TimeCounter.prototype.display = function () {
 	}
 
 	this.scene.pushMatrix();
-		this.scene.scale(4,1.5,0.2);
+		this.scene.scale(4,1.5,2);
 		this.scene.translate(0.31,0,-0.55);
 		this.texture_bkg.bind(0);
 		this.cube.display();

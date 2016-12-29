@@ -3,19 +3,9 @@ var pushed_pieces;
 var score;
 var auto_move;
 
-function Game(scene, board, gameMode, difficulty) {
+function Game(scene, board) {
     this.scene = scene;
     this.board = board;
-
-    this.gameMode = gameMode;
-    this.difficulty = difficulty;
-
-    var mode;
-    switch (gameMode) {
-        case 0: mode = 'Player VS Player'; break;
-        case 1: mode = 'Player VS AI'; break;
-        case 2: mode = 'AI VS AI'; break;
-    }
 
     this.turnOngoing = false;
 
@@ -36,7 +26,16 @@ function Game(scene, board, gameMode, difficulty) {
 
 	this.currTurn = this.board_first;
 	this.moveInProgress = false;
+	
+}
 
+Game.prototype = Object.create(CGFobject.prototype);
+Game.prototype.constructor = Game;
+
+Game.prototype.startGame = function(gameMode, difficulty){
+    this.gameMode = gameMode;
+    this.difficulty = difficulty;
+    
 	if(this.gameMode == 0){
 		this.humanTurn = true;
 		this.computerTurn = false;
@@ -46,11 +45,9 @@ function Game(scene, board, gameMode, difficulty) {
 	}else if(this.gameMode == 2){
 		this.humanTurn = false;
 		this.autoPlay();
-	}	
-}
+	}
 
-Game.prototype = Object.create(CGFobject.prototype);
-Game.prototype.constructor = Game;
+}
 
 Game.prototype.autoPlay = async function (){
 	do{
@@ -450,6 +447,9 @@ Game.prototype.playHumanTurn = async function(customId){
 				this.currTurn = this.board_second;
 			else if(this.currTurn == this.board_second)
 				this.currTurn = this.board_first;
+
+			this.scene.playPerspAnimation();
+			this.scene.setNextPlayer();
 			
 			this.board.updatePieceSelected(false);
 			this.sel_first = -1;

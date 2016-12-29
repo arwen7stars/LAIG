@@ -415,10 +415,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement){
 
 	this.animations_list=[]; //[id, MyAnimation]
 
-	var arrayPerspAnimations = [];
-	// declare aux array for pers animations
-	var arrayPerspAnimationsInfo = [];
-
 	var nAnimations=animations_ini[0].children.length;
 
 	for(var i=0;i<nAnimations;i++){
@@ -465,11 +461,10 @@ MySceneGraph.prototype.parseAnimations = function(rootElement){
 				console.log("Leu circular animation: center " + centerCoords + " radius "+radius+" startang "+startang+ " rotang " + rotang);
 			
 		} else if (animationType === 'perspective') {
-
 			var clock = this.reader.getBoolean(animationRef, 'clock', 1);
 			var nPerspectiveRef = animationRef.children.length;
 
-			var arrayPersp = [];
+			var persp_array = [];
 			
 			for (var j = 0; j < nPerspectiveRef; j++) {
 				var perspRefTag = animationRef.children[j];
@@ -481,19 +476,15 @@ MySceneGraph.prototype.parseAnimations = function(rootElement){
 						persp = this.views_list[i];
 					}
 				}
-				arrayPerspAnimations.push(persp);
-				arrayPerspAnimationsInfo.push(animationID);
-				arrayPerspAnimationsInfo.push(animationSpan);
-				arrayPerspAnimationsInfo.push(animationSpan);
-				arrayPerspAnimationsInfo.push(clock);
+				persp_array.push(persp);
 			}
 		}
 		
 		if (animationType == 'perspective'){
-			console.log("PERSPECTIVE " + arrayPerspAnimationsInfo[0]);
-			
-			this.perspAnimations = new perspectiveAnimation(arrayPerspAnimationsInfo[0], arrayPerspAnimationsInfo[1], arrayPerspAnimationsInfo[2], arrayPerspAnimationsInfo[3], arrayPerspAnimations[0], arrayPerspAnimations[1]);
-		} else {
+			//this.perspAnimations = [];
+			this.perspAnimations = new perspAnimation(this.scene, animationID, animationSpan, animationType, clock, persp_array[0], persp_array[1], false);
+			//this.perspAnimations[1] = new perspAnimation(this.scene, animationID, animationSpan, animationType, !clock, persp_array[0], persp_array[1]);
+			} else {
 			var vecIdAnimacao = [animationID, animation];
 			this.animations_list.push(vecIdAnimacao);
 		}

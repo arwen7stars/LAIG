@@ -1,26 +1,24 @@
 
-function perspectiveAnimation(id, span, type, clock, persp1, persp2) {
-	this.id = id;
-	this.span = span;
-	this.type = type;
-	this.clock = clock;
+function perspAnimation(scene, id, span, type, clock, persp1, persp2, first_player) {
+	CGFobject.call(this,scene);
+
+	this.id = id;			// animation id
+	this.span = span;		// animation span
+	this.type = type;		// type of animation
+	this.clock = clock;		// animation direction
+
 	this.persp1 = persp1;
 	this.persp2 = persp2;
 	this.currPersp = persp1.clone();
+
+	this.first = true;
 	
-	this.onhold = true;
-	this.backwards = false;
+	this.ongoing = false;
 
 	var persp1_from = this.persp1.getFromPosition();
 	var persp2_from = this.persp2.getFromPosition();
 
-	this.startang = -1 * Math.atan2(persp1_from[2], persp1_from[0]);
-
-	if (clock === false) {
-		this.rotang = 180;
-	} else {
-		this.rotang = -180;
-	}
+	this.rotang = 180;
 
 	var distance = Math.sqrt(
 		(persp2_from[0] - persp1_from[0]) * (persp2_from[0] - persp1_from[0]) +
@@ -29,76 +27,51 @@ function perspectiveAnimation(id, span, type, clock, persp1, persp2) {
 
 	this.radius = distance / 2;
 
-	var center = [(persp1_from[0] + persp2_from[0]) / 2,
-		(persp1_from[1] + persp2_from[1]) / 2,
-		(persp1_from[2] + persp2_from[2]) / 2
-	];
+	this.center = [];
+	this.center[0] = (persp1_from[0] + persp2_from[0]) / 2;
+	this.center[1] = (persp1_from[1] + persp2_from[1]) / 2;
+	this.center[2] = (persp1_from[2] + persp2_from[2]) / 2;
 
-	this.center = center.slice(0);
-	// set animation
+	this.first_player = first_player;
+	
 	this.animation = new MyCircularAnimation(null, this.span, this.type, this.center, this.radius, this.startang, this.rotang);
 }
 
-perspectiveAnimation.prototype.update = function(currTime) {
-	if (this.animation.finalPositionDrawn === false && this.onhold === false) {
-		this.animation.update(currTime);
+perspAnimation.prototype.setNextPlayer = function(){
+	this.first_player = !this.first_player;
+	if(this.rotang == 180)
+		this.rotang = -180;
+	else this.rotang = 180;
+}
 
-/*		// update current perspective
-		//var perspFrom = [0, 0, 0];
-		//this.animation.getAbsolutePos(perspFrom);
+perspAnimation.prototype.update = function(currTime) {
+	if (this.ongoing === true) {
+		if(this.animation.finalPositionDrawn === false){
+			this.animation.update(currTime);
 
-		var animPosition = this.animation.position.slice(0);
-		this.currPersp.from[0] = animPosition[0] + this.center[0];
-		this.currPersp.from[1] = animPosition[1] + this.center[1];
-		this.currPersp.from[2] = animPosition[2] + this.center[2];
-*/
-		//this.currPersp.from[0] = perspFrom[0];
-		//this.currPersp.from[1] = perspFrom[1];
-		//this.currPersp.from[2] = perspFrom[2];
+			if(this.first_player){
+				this.startang = 0;
+			} else this.startang = 160;
+
+			var animPosition = this.animation.getCurrentPosition(this.startang);
+
+			this.currPersp.from_x = animPosition[0] + this.center[0];
+			this.currPersp.from_z = animPosition[1] + this.center[2];
+		}
+
+		this.scene.activateCamera = this.animation.finalPositionDrawn;
+
+		this.scene.setCamera(this.currPersp);
+	
+		if (this.animation.finalPositionDrawn === true) {
+				this.ongoing = false;
+				this.animation = new MyCircularAnimation(null, this.span, this.type, this.center, this.radius, this.startang, this.rotang);
+
+		}
 	}
 };
 
 
-perspectiveAnimation.prototype.apply = function(scene) {
-
-	if (this.onhold === false) {
-		scene.allowMoveCamera = this.animation.finalPositionDrawn;
-		this.onhold = this.animation.finalPositionDrawn;
-		scene.setCamera(this.currPersp);
-	}
-};
-
-perspectiveAnimation.prototype.activate = function() {
-
-	// activate it
-	this.onhold = false;
-
-	// but only reset if animation is already over
-	if (this.animation.finalPositionDrawn === true) {
-		this.reset();
-	}
-};
-
-perspectiveAnimation.prototype.reset = function() {
-
-	if (this.backwards === false) {
-		// reset curr perpsective
-		this.currPersp = this.persp2.clone();
-
-		// reset animation
-		this.animation = new MyCircularAnimation(null, this.span, this.type, this.center, this.radius, this.startang + 180, this.rotang);
-
-		// set backwards
-		this.backwards = true;
-	} else {
-		// reset curr perpsective
-		this.currPersp = this.persp1.clone();
-
-		// reset animation
-		this.animation = new MyCircularAnimation(null, this.span, this.type, this.center, this.radius, this.startang, this.rotang);
-
-		// set backwards
-		this.backwards = false;
-	}
-
+perspAnimation.prototype.activate = function() {
+	this.ongoing = true;
 };

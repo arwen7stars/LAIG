@@ -48,13 +48,6 @@ MyInterface.prototype.processKeyboard = function(event) {
 	
 	switch (event.keyCode)
 	{
-		case (109):	// m
-		  console.log("m pushed");
-		  this.scene.playPerspectiveAnimation();
-		  break;
-		case(77): // M
-		  console.log("M pushed");
-		  this.scene.playPerspectiveAnimation();
-		  break;
+		
 	};
 };
