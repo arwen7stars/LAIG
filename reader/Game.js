@@ -17,6 +17,7 @@ function Game(scene, board, gameMode, difficulty) {
         case 2: mode = 'AI VS AI'; break;
     }
 
+    this.turnOngoing = false;
 
     this.gameOver = false;
 
@@ -39,10 +40,11 @@ function Game(scene, board, gameMode, difficulty) {
 	if(this.gameMode == 0){
 		this.humanTurn = true;
 		this.computerTurn = false;
-	} else if(this.gameMode == 2){
-		this.computerTurn = true;
+	} else if(this.gameMode == 1){
+		this.humanTurn = true;
+		this.computerTurn = false;
+	}else if(this.gameMode == 2){
 		this.humanTurn = false;
-
 		this.autoPlay();
 	}	
 }
@@ -51,67 +53,66 @@ Game.prototype = Object.create(CGFobject.prototype);
 Game.prototype.constructor = Game;
 
 Game.prototype.autoPlay = async function (){
-	do {
-	
-	if(!this.turnOngoing){
-		this.turnOngoing = true;
-		console.log("CURRENT TURN" + this.currTurn);
-		var boardString = this.board.getBoard();
+	do{
+		if(!this.turnOngoing){
 
-		var requestString = `thinkMove(` + boardString + `,` + this.currTurn + `,` + this.difficulty + `)`;
-		this.getPrologRequest(requestString, function(data) {
-			auto_move = data.target.response;
-			console.log(data.target.response);	
-		});
-		await sleep(2000);
+			this.turnOngoing = true;
 
-		console.log("RESPONSE " + auto_move);
+			console.log("CURRENT TURN" + this.currTurn);
 
-		var move_info = auto_move.split("-");
+			var boardString = this.board.getBoard();
 
-		var column = Number(move_info[0]);
-		var line = Number(move_info[1]);
-		var dir = move_info[2];
-		var spaces = Number(move_info[3]);
+			var requestString = `thinkMove(` + boardString + `,` + this.currTurn + `,` + this.difficulty + `)`;
+			this.getPrologRequest(requestString, function(data) {
+				auto_move = data.target.response;
+				console.log(data.target.response);	
+			});
+			await sleep(2000);
 
-		var piece = this.board.getPiece(column, line);
+			console.log("RESPONSE " + auto_move);
 
-		console.log("PIECE LINE " + piece.getLine() + " PIECE COL " + piece.getColumn());
-		console.log("LINE " + line + " COLUMN " + column + " DIR " + dir + " SPACES " + spaces);
+			var move_info = auto_move.split("-");
 
-		var dest_line;
-		var dest_col;
-		if(dir == "east"){
-			dest_line = line + spaces;
-			dest_col = column;
-		} else if(dir == "west"){
-			dest_line = line - spaces;
-			dest_col = column;
-		} else if(dir == "south"){
-			dest_line = line;
-			dest_col = column + spaces;
-		} else if(dir == "north"){
-			dest_line = line;
-			dest_col = column - spaces;
+			var column = Number(move_info[0]);
+			var line = Number(move_info[1]);
+			var dir = move_info[2];
+			var spaces = Number(move_info[3]);
+
+			var piece = this.board.getPiece(column, line);
+
+			console.log("PIECE LINE " + piece.getLine() + " PIECE COL " + piece.getColumn());
+			console.log("LINE " + line + " COLUMN " + column + " DIR " + dir + " SPACES " + spaces);
+
+			var dest_line;
+			var dest_col;
+			if(dir == "east"){
+				dest_line = line + spaces;
+				dest_col = column;
+			} else if(dir == "west"){
+				dest_line = line - spaces;
+				dest_col = column;
+			} else if(dir == "south"){
+				dest_line = line;
+				dest_col = column + spaces;
+			} else if(dir == "north"){
+				dest_line = line;
+				dest_col = column - spaces;
+			}
+
+			console.log("DEST LINE " + dest_line + " DEST COLUMN " + dest_col);
+
+			this.movePiece(piece, dest_line, dest_col);
+			await sleep(3000);
+
+		// passa para o proximo turno
+		if(this.currTurn == this.board_first)
+			this.currTurn = this.board_second;
+		else if(this.currTurn == this.board_second)
+			this.currTurn = this.board_first;
+
+			this.turnOngoing = false;
 		}
-
-		console.log("DEST LINE " + dest_line + " DEST COLUMN " + dest_col);
-
-		this.movePiece(piece, dest_line, dest_col);
-		await sleep(3000);
-
-	// passa para o proximo turno
-	if(this.currTurn == this.board_first)
-		this.currTurn = this.board_second;
-	else if(this.currTurn == this.board_second)
-		this.currTurn = this.board_first;
-
-		this.turnOngoing = false;
-	}
-
-	} while (!this.gameOver)
-
-
+	} while(!this.gameOver)
 }
 
 Game.prototype.getFirstPlayer = function(){
@@ -414,6 +415,8 @@ Game.prototype.movePiece = async function (piece, line, column){
 
 	if(scores[0] >= 7 || scores[1] >= 7){
 		this.gameOver = true;
+		console.log("JOGO ACABOU!!!!!!!!!!!!!!");
+		
 	}
 
 	// atualiza a placa de scores
@@ -441,6 +444,7 @@ Game.prototype.playHumanTurn = async function(customId){
 
 		if(valid_move && valid_push){
 			this.movePiece(sel_piece, sel_line, sel_column);
+			await sleep(3500);
 
 			if(this.currTurn == this.board_first)
 				this.currTurn = this.board_second;
@@ -453,13 +457,78 @@ Game.prototype.playHumanTurn = async function(customId){
 		}
 		
 		this.moveInProgress = false;
+
+		if(this.gameMode == 1){
+			console.log("GAME MODE " + this.gameMode);
+			this.humanTurn = false;
+			this.computerTurn = true;
+		}
 	}	
 	
 }
 
+Game.prototype.playComputerTurn = async function(){
+	if(!this.turnOngoing){
+		this.turnOngoing = true;
+
+		console.log("CURRENT TURN" + this.currTurn);
+
+		var boardString = this.board.getBoard();
+
+		var requestString = `thinkMove(` + boardString + `,` + this.currTurn + `,` + this.difficulty + `)`;
+		this.getPrologRequest(requestString, function(data) {
+			auto_move = data.target.response;
+			console.log(data.target.response);	
+		});
+		await sleep(2000);
+
+		console.log("RESPONSE " + auto_move);
+
+		var move_info = auto_move.split("-");
+
+		var column = Number(move_info[0]);
+		var line = Number(move_info[1]);
+		var dir = move_info[2];
+		var spaces = Number(move_info[3]);
+
+		var piece = this.board.getPiece(column, line);
+
+		console.log("PIECE LINE " + piece.getLine() + " PIECE COL " + piece.getColumn());
+		console.log("LINE " + line + " COLUMN " + column + " DIR " + dir + " SPACES " + spaces);
+
+		var dest_line;
+		var dest_col;
+		if(dir == "east"){
+			dest_line = line + spaces;
+			dest_col = column;
+		} else if(dir == "west"){
+			dest_line = line - spaces;
+			dest_col = column;
+		} else if(dir == "south"){
+			dest_line = line;
+			dest_col = column + spaces;
+		} else if(dir == "north"){
+			dest_line = line;
+			dest_col = column - spaces;
+		}
+
+		console.log("DEST LINE " + dest_line + " DEST COLUMN " + dest_col);
+
+		this.movePiece(piece, dest_line, dest_col);
+		await sleep(3000);
+
+		// passa para o proximo turno
+		if(this.currTurn == this.board_first)
+			this.currTurn = this.board_second;
+		else if(this.currTurn == this.board_second)
+			this.currTurn = this.board_first;
+
+			this.turnOngoing = false;
+	}	
+}
 
 Game.prototype.picking = function (obj, customId){
-		if (obj && this.humanTurn)
+		if (obj && this.humanTurn && !this.gameOver)
 		{			
 			console.log("Picked object: " + obj + ", with pick id " + customId);
 
@@ -480,5 +549,13 @@ Game.prototype.display = function () {
 
 
 Game.prototype.update = function () {
-	this.score_board.setActivePlayer(this.currTurn);	
+	this.score_board.setActivePlayer(this.currTurn);
+
+	if(!this.humanTurn && this.computerTurn && !this.gameOver){
+		this.playComputerTurn();
+
+		this.humanTurn = true;
+		this.computerTurn = false;
+
+	}
 }

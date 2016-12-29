@@ -337,7 +337,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.getTimeCounter(rootVector);
 
 
-	this.game = new Game(this, this.board, 2, 1);
+	this.game = new Game(this, this.board, 1, 1);
 	this.game.setBoardScore(this.time_counter);
 };
 
