@@ -13,7 +13,7 @@ void main() {
 
 	vec4 color;
 
-	if(tex_x < 0.05 || tex_y < 0.05 || tex_x > 0.95 || tex_y > 0.95)
+	if(tex_x < 0.1 || tex_y < 0.1 || tex_x > 0.9 || tex_y > 0.9)
 		color = vec4(1.0, 1.0, 1.0, 1.0);
 	else{
 		color=c;

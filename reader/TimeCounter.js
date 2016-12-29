@@ -2,25 +2,24 @@
  * Creates a MyPiece object 
  * Uses two MySemiSphere objects to create a sphere
  */
-function TimeCounter(scene, seconds_dec, seconds_uni, minutes_dec, minutes_uni) {
+function TimeCounter(scene, first_score, second_score) {
  	CGFobject.call(this,scene);
- 	this.seconds_dec = seconds_dec;
- 	this.seconds_uni = seconds_uni;
+ 	this.first_score = first_score;
+ 	this.second_score = second_score;
 
- 	this.minutes_dec = minutes_dec;
- 	this.minutes_uni = minutes_uni;
+ 	this.active_player;
+ 	this.first_player;
+ 	this.second_player;
 
- 	this.texture_sec_dec;
- 	this.texture_sec_uni;
- 	this.texture_min_dec;
- 	this.texture_min_uni;
+ 	this.texture_first_score;
+ 	this.texture_second_score;
+	
  	this.texture_colon = new CGFtexture(this.scene, "./resources/colon.png");
-	this.texture_bkg = new CGFtexture(this.scene, "./resources/wood.jpg");
+	this.texture_bkg = new CGFtexture(this.scene, "./resources/texture.jpg");
+	this.shader = new CGFshader(this.scene.gl, "shaders/shader.vert", "shaders/shader.frag");
 
- 	this.plane_sec_dec = new MyPlane(this.scene,1,1,10,10);
- 	this.plane_sec_uni = new MyPlane(this.scene,1,1,10,10);
- 	this.plane_min_dec = new MyPlane(this.scene,1,1,10,10);
- 	this.plane_min_uni = new MyPlane(this.scene,1,1,10,10);
+ 	this.plane_first_score = new MyPlane(this.scene,1,1,10,10);
+ 	this.plane_second_score = new MyPlane(this.scene,1,1,10,10);
  	this.plane_colon = new MyPlane(this.scene,1,1,10,10);
 
  	this.cube = new MyUnitCubeQuad(this.scene);
@@ -33,8 +32,6 @@ function TimeCounter(scene, seconds_dec, seconds_uni, minutes_dec, minutes_uni) 
 	this.five = new CGFtexture(this.scene, "./resources/05.png");
 	this.six = new CGFtexture(this.scene, "./resources/06.png");
 	this.seven = new CGFtexture(this.scene, "./resources/07.png");
-	this.eight = new CGFtexture(this.scene, "./resources/08.png");
-	this.nine = new CGFtexture(this.scene, "./resources/09.png");
 
  	this.chooseTexture();
  };
@@ -44,141 +41,117 @@ TimeCounter.prototype.constructor = TimeCounter;
 
 TimeCounter.prototype.chooseTexture = function () {
 	
-	if(this.seconds_dec == 0)
- 		this.texture_sec_dec = this.zero;
- 	else if(this.seconds_dec == 1)
- 		this.texture_sec_dec = this.one;
- 	else if(this.seconds_dec == 2)
- 		this.texture_sec_dec = this.two
- 	else if(this.seconds_dec == 3)
- 	 	this.texture_sec_dec = this.three;
-	else if(this.seconds_dec == 4)
- 	 	this.texture_sec_dec = this.four;
- 	else if(this.seconds_dec == 5)
- 	 	this.texture_sec_dec = this.five;
- 	else if(this.seconds_dec == 6)
-	 	this.texture_sec_dec = this.six;
-	else if(this.seconds_dec == 7)
-	  	this.texture_sec_dec = this.seven;
-	else if(this.seconds_dec == 8)
-	  	this.texture_sec_dec = this.eight;
-	else this.texture_sec_dec = this.nine;
+	if(this.first_score == 0)
+ 		this.texture_first_score = this.zero;
+ 	else if(this.first_score == 1)
+ 		this.texture_first_score = this.one;
+ 	else if(this.first_score == 2)
+ 		this.texture_first_score = this.two
+ 	else if(this.first_score == 3)
+ 	 	this.texture_first_score = this.three;
+	else if(this.first_score == 4)
+ 	 	this.texture_first_score = this.four;
+ 	else if(this.first_score == 5)
+ 	 	this.texture_first_score = this.five;
+ 	else if(this.first_score == 6)
+	 	this.texture_first_score = this.six;
+	else if(this.first_score == 7)
+	  	this.texture_first_score = this.seven;
 
-	if(this.seconds_uni == 0)
- 		this.texture_sec_uni = this.zero;
- 	else if(this.seconds_uni == 1)
- 		this.texture_sec_uni = this.one;
- 	else if(this.seconds_uni == 2)
- 		this.texture_sec_uni = this.two;
- 	else if(this.seconds_uni == 3)
- 	 	this.texture_sec_uni = this.three;
-	else if(this.seconds_uni == 4)
- 	 	this.texture_sec_uni = this.four;
- 	else if(this.seconds_uni == 5)
- 	 	this.texture_sec_uni = this.five;
- 	else if(this.seconds_uni == 6)
-	 	this.texture_sec_uni = this.six;
-	else if(this.seconds_uni == 7)
-	  	this.texture_sec_uni = this.seven;
-	else if(this.seconds_uni == 8)
-	  	this.texture_sec_uni = this.eight;
-	else this.texture_sec_uni = this.nine;
-
-		if(this.minutes_dec == 0)
- 		this.texture_min_dec = this.zero;
- 	else if(this.minutes_dec == 1)
- 		this.texture_min_dec = this.one;
- 	else if(this.minutes_dec == 2)
- 		this.texture_min_dec = this.two;
- 	else if(this.minutes_dec == 3)
- 	 	this.texture_min_dec = this.three;
-	else if(this.minutes_dec == 4)
- 	 	this.texture_min_dec = this.four;
- 	else if(this.minutes_dec == 5)
- 	 	this.texture_min_dec = this.five;
- 	else if(this.minutes_dec == 6)
-	 	this.texture_min_dec = this.six;
-	else if(this.minutes_dec == 7)
-	  	this.texture_min_dec = this.seven;
-	else if(this.minutes_dec == 8)
-	  	this.texture_min_dec = this.eight;
-	else this.texture_min_dec = this.nine;
-
-	if(this.minutes_uni == 0)
- 		this.texture_min_uni = this.zero;
- 	else if(this.minutes_uni == 1)
- 		this.texture_min_uni = this.one;
- 	else if(this.minutes_uni == 2)
- 		this.texture_min_uni = this.two;
- 	else if(this.minutes_uni == 3)
- 	 	this.texture_min_uni = this.three;
-	else if(this.minutes_uni == 4)
- 	 	this.texture_min_uni = this.four;
- 	else if(this.minutes_uni == 5)
- 	 	this.texture_min_uni = this.five;
- 	else if(this.minutes_uni == 6)
-	 	this.texture_min_uni = this.six;
-	else if(this.minutes_uni == 7)
-	  	this.texture_min_uni = this.seven;
-	else if(this.minutes_uni == 8)
-	  	this.texture_min_uni = this.eight;
-	else this.texture_min_uni = this.nine;
+		if(this.second_score == 0)
+ 		this.texture_second_score = this.zero;
+ 	else if(this.second_score == 1)
+ 		this.texture_second_score = this.one;
+ 	else if(this.second_score == 2)
+ 		this.texture_second_score = this.two;
+ 	else if(this.second_score == 3)
+ 	 	this.texture_second_score = this.three;
+	else if(this.second_score == 4)
+ 	 	this.texture_second_score = this.four;
+ 	else if(this.second_score == 5)
+ 	 	this.texture_second_score = this.five;
+ 	else if(this.second_score == 6)
+	 	this.texture_second_score = this.six;
+	else if(this.second_score == 7)
+	  	this.texture_second_score = this.seven;
 
 }
 
-TimeCounter.prototype.update = function (seconds_dec, seconds_uni, minutes_dec, minutes_uni) {
-	this.seconds_dec = seconds_dec;
-	this.seconds_uni = seconds_uni;
-	this.minutes_dec = minutes_dec;
-	this.minutes_uni = minutes_uni;
+TimeCounter.prototype.update = function (first_score, second_score) {
+	this.first_score = first_score;
+	this.second_score = second_score;
 
 	this.chooseTexture();
 }
 
+TimeCounter.prototype.setPlayers = function(first_player, second_player){
+	this.first_player = first_player;
+	this.second_player = second_player;
+
+	if(this.first_player == "red"){
+		this.color_first = [1.0, 0.0, 0.0, 1.0];
+	} else{
+		this.color_first = [0.5, 0.5, 0.5, 1.0];
+	}
+
+	if(this.second_player == "red"){
+		this.color_second = [1.0, 0.0, 0.0, 1.0];
+	} else{
+		this.color_second = [0.5, 0.5, 0.5, 1.0];
+	}
+}
+
+TimeCounter.prototype.setActivePlayer = function(curr_player){
+	this.active_player = curr_player;
+}
+
 TimeCounter.prototype.display = function () {
 
-	this.scene.pushMatrix();
-		this.scene.scale(1,1.5,1);
-		this.texture_min_dec.bind(0);
-		this.plane_min_dec.display();
-		this.texture_min_dec.unbind();
-	this.scene.popMatrix();
+	if(this.active_player == this.second_player){
+		this.scene.setActiveShader(this.shader);
+		this.shader.setUniformsValues({c: this.color_second});
+	}
 
 	this.scene.pushMatrix();
-		this.scene.scale(1,1.5,1);
-		this.scene.translate(1,0,0);
-		this.texture_min_uni.bind(0);
-		this.plane_min_uni.display();
-		this.texture_min_uni.unbind();
+		this.scene.scale(1.5,1.5,1);
+		this.texture_second_score.bind(0);
+		this.plane_second_score.display();
+		this.texture_second_score.unbind();
 	this.scene.popMatrix();
 
+	if(this.active_player == this.second_player){
+		this.scene.setActiveShader(this.scene.defaultShader);
+	}
+
 	this.scene.pushMatrix();
-		this.scene.translate(1.75,0,0);
-		this.scene.scale(0.5,1.5,1);
+		this.scene.translate(1.25,0,0);
+		this.scene.scale(1,1.5,1);
 		this.texture_colon.bind(0);
 		this.plane_colon.display();
 		this.texture_colon.unbind();
 	this.scene.popMatrix();
 
-	this.scene.pushMatrix();
-		this.scene.scale(1,1.5,1);
-		this.scene.translate(2.5,0,0);
-		this.texture_sec_dec.bind(0);
-		this.plane_sec_uni.display();
-		this.texture_sec_dec.unbind();
-	this.scene.popMatrix();
+	if(this.active_player == this.first_player){
+		this.scene.setActiveShader(this.shader);
+		this.shader.setUniformsValues({c: this.color_first});
+	}
 
 	this.scene.pushMatrix();
-		this.scene.scale(1,1.5,1);
-		this.scene.translate(3.5,0,0);
-		this.texture_sec_uni.bind(0);
-		this.plane_sec_dec.display();
-		this.texture_sec_uni.unbind();
+		this.scene.scale(1.5,1.5,1);
+		this.scene.translate(1.65,0,0);
+		this.texture_first_score.bind(0);
+		this.plane_first_score.display();
+		this.texture_first_score.unbind();
 	this.scene.popMatrix();
 
+	if(this.active_player == this.first_player){
+		this.scene.setActiveShader(this.scene.defaultShader);
+		this.end_turn = false;
+	}
+
 	this.scene.pushMatrix();
-		this.scene.scale(4.52,1.5,0.5);
-		this.scene.translate(0.39,0,-0.51);
+		this.scene.scale(4,1.5,0.2);
+		this.scene.translate(0.31,0,-0.55);
 		this.texture_bkg.bind(0);
 		this.cube.display();
 		this.texture_bkg.unbind();

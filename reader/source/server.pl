@@ -110,6 +110,7 @@ print_header_line(_).
 
 :-include('logic.pl').
 :-include('score.pl').
+:-include('ai.pl').
 
 isGameOver(Board, Answer) :-
 	gameOver(Board, draw),
@@ -171,10 +172,20 @@ checkPush(Board, Row, Col, Dir, Spaces, Player, Answer) :-
 checkPush(_, _, _, _, _, _, Answer) :-
 	Answer = 'false'.
 
+getBoardScore(Board, Answer) :-
+	getScore(Board, Score),
+	Answer = Score.
+	
+thinkBoardMove(Board, Player, Difficulty, Answer) :-
+	thinkMove(Board, Player, Difficulty, Move),
+	Answer = Move.
+
 
 parse_input(startGame, 'game may have started'):- game.
 parse_input(isTheGameOver(Board), Answer) :- isGameOver(Board, Answer).
 parse_input(checkMove(Row, Col, Dir, Spaces, Size), Answer) :- checkMove(Row, Col, Dir, Spaces, Size, Answer).
 parse_input(checkPush(Board, Row, Col, Dir, Spaces, Player), Answer) :- checkPush(Board, Row, Col, Dir, Spaces, Player, Answer).
 parse_input(getPushedPieces(Board, Row, Col, Dir), Answer) :- getPushedPieces(Board, Row, Col, Dir, Answer).
+parse_input(getBoardScore(Board), Answer) :- getBoardScore(Board, Answer).
+parse_input(thinkMove(Board, Player, Difficulty), Answer) :- thinkBoardMove(Board, Player, Difficulty, Answer).
 parse_input(quit, goodbye).

@@ -9,8 +9,6 @@ uniform mat4 uNMatrix;
 varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
 
-uniform vec4 c;
-
 void main() {
 	vTextureCoord = aTextureCoord;
 	

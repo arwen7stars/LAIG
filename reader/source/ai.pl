@@ -1,14 +1,5 @@
-/** <module> Artificial Intelligence Module
-
-This module discovers the best move possible that one of the players can
-do in given state of the board.
-*/
-:- module(ai, [thinkMove/4]).
-
 :- use_module(library(random)).
 :- use_module(library(lists)).
-:- use_module(score).
-:- use_module(logic).
 
 /** thinkMove(+Board, +Player, +Difficulty, -Move)
 

@@ -4,20 +4,15 @@
     
 	
     <views default="view2" >
-    
-        <perspective id="view0" near="0.1" far="500" angle="0.4">
-            <from x="25" y="25" z="25" />
-            <to x="2" y="0" z="3" />
-        </perspective>
 		
-		<perspective id="view1" near="0.1" far="500" angle="0.4">
-            <from x="15" y="20" z="10" />
-            <to x="0" y="0" z="0" />
+       	<perspective id="view1" near="0.1" far="100" angle="0.4">
+            <from x="3" y="40" z="10" />
+            <to x="3" y="1" z="2" />
         </perspective>
 
        	<perspective id="view2" near="0.1" far="100" angle="0.4">
-            <from x="3" y="40" z="0" />
-            <to x="3" y="1" z="3" />
+            <from x="3" y="45" z="-10" />
+            <to x="3" y="1" z="2" />
         </perspective>
         
     </views>
@@ -127,7 +122,7 @@
     	<animation id="circular1" span="2" type="circular" center="0 0 0" radius="2" startang="0" rotang="360" />
 
     	<animation id="olaaa" span="3" type="perspective" clock="1">
-          <perspectiveref id="view0"/>
+          <perspectiveref id="view2"/>
           <perspectiveref id="view1"/>
         </animation>
 
@@ -202,26 +197,8 @@
             <children>
             	<componentref id="carpet" />
                 <componentref id="table" />
-                <componentref id="timecounter" />
+				<componentref id="timecounter" />
             </children>   
-        </component>
-
-        <component id = "timecounter">
-			<transformation>
-				<translate x="8" y="2.65" z="1.3" />
-				<rotate axis="y" angle="-90" />
-				<rotate axis="x" angle="-45" />
-			</transformation>
-
-			<materials>
-                <material id="sea" />
-            </materials>
-                    
-            <texture id="carpet" />
-            
-            <children>
-                <primitiveref id="time_counter" /> 
-            </children> 
         </component>
 
 	<component id = "carpet">
@@ -505,6 +482,24 @@
            		 
             <children>
                 <primitiveref id="rect" /> 
+            </children> 
+        </component>
+
+		<component id = "timecounter">
+			<transformation>
+				<translate x="8.3" y="2.3" z="1.8" />
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="-70" />
+			</transformation>
+
+			<materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="carpet" />
+            
+            <children>
+                <primitiveref id="time_counter" /> 
             </children> 
         </component>
        

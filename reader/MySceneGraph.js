@@ -731,7 +731,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 		} else if (primitive_name == "time_counter") {
 			console.log("time counter found");
 
-			var tim = new TimeCounter(this.scene, 0, 0, 0, 0);
+			var tim = new TimeCounter(this.scene, 0, 0);
 			var prim = new MyPrimitive(primID, tim);
 		}
 		else if (primitive_name == "chessboard") {

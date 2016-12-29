@@ -57,12 +57,12 @@ XMLscene.prototype.init = function (application) {
 
 	this.one_second = 0;
 
-	this.time_counter = new TimeCounter(this, Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+	//this.time_counter = new TimeCounter(this, Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
 
 	this.setPickEnabled(true);
 };
 
-XMLscene.prototype.updateTimeCounter = function(list) {
+XMLscene.prototype.getTimeCounter = function(list) {
 	var nComp = list.length;
 	var compAtual;
 
@@ -78,7 +78,10 @@ XMLscene.prototype.updateTimeCounter = function(list) {
 			for(var j = 0; j < nPrim; j++){
 
 				if(primitives[j].getPrimitive() instanceof TimeCounter){
-					primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+					console.log("TIME COUNTER FOUND");
+					this.time_counter = primitives[j].getPrimitive();
+					//primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
+					return;
 				}
 			}
 				
@@ -87,18 +90,9 @@ XMLscene.prototype.updateTimeCounter = function(list) {
 		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
 		if(children.length > 0){
 
-			this.updateTimeCounter(children);
+			this.getTimeCounter(children);
 		}
 	}
-}
-
-function clone(obj) {
-    if (null == obj || "object" != typeof obj) return obj;
-    var copy = obj.constructor();
-    for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-    }
-    return copy;
 }
 
 XMLscene.prototype.getBoardFromGraph = function(list) {
@@ -149,9 +143,6 @@ XMLscene.prototype.update = function(currTime) {
 		this.game.update();
 		this.graph.perspAnimations.update(currTime);
 
-		var rootVector = [];
-		rootVector.push(this.graph.component_list[0]);
-
 		// nota: updatePeriod esta em milisegundos
 
 		this.game_time++;
@@ -164,7 +155,7 @@ XMLscene.prototype.update = function(currTime) {
 		this.minutes = Math.floor((this.total_seconds % 3600) / 60);
 
 		if(one_second == 1){	
-			this.updateTimeCounter(rootVector);
+			//this.updateTimeCounter(rootVector);
 
 			this.one_second = 0;
 		}
@@ -341,7 +332,13 @@ XMLscene.prototype.onGraphLoaded = function ()
 	rootVector.push(this.graph.component_list[0]);
 	this.getBoardFromGraph(rootVector);
 
-	this.game = new Game(this, this.board);
+	var rootVector = [];
+	rootVector.push(this.graph.component_list[0]);
+	this.getTimeCounter(rootVector);
+
+
+	this.game = new Game(this, this.board, 2, 1);
+	this.game.setBoardScore(this.time_counter);
 };
 
 XMLscene.prototype.display = function () {

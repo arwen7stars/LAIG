@@ -2,6 +2,8 @@ function MyBoard(scene, size_casa, first_player) {
  	CGFobject.call(this,scene);
 
  	this.texture = new CGFtexture(this.scene, "./resources/wood.png");
+ 	this.shader = new CGFshader(this.scene.gl, "shaders/shader_cell.vert", "shaders/shader_cell.frag");
+
 
  	this.size_casa = size_casa;
  	this.first_player = first_player;
@@ -58,6 +60,52 @@ MyBoard.prototype.getFirstPieces = function () {
 
 MyBoard.prototype.getSecondPieces = function () {
 	return this.second_pieces;
+}
+
+MyBoard.prototype.getPiece = function(col, lin){
+
+	for(var i = 0; i < this.first_pieces.length; i++){
+		var lin_piece = this.first_pieces[i].getLine();
+		var col_piece = this.first_pieces[i].getColumn();
+
+		console.log("LINHA" + lin_piece + "COL " +  col_piece);
+
+		if((lin_piece == lin) && (col_piece == col)){
+			return this.first_pieces[i];
+		}
+	}
+
+	for(var i = 0; i < this.second_pieces.length; i++){
+		var lin_piece = this.second_pieces[i].getLine();
+		var col_piece = this.second_pieces[i].getColumn();
+
+		if((lin_piece == lin) && (col_piece == col)){
+			return this.second_pieces[i];
+		}
+	}
+
+
+}
+
+MyBoard.prototype.getPieceIndex = function(col, lin){
+
+	for(var i = 0; i < this.first_pieces.length; i++){
+		var lin_piece = this.first_pieces[i].getLine();
+		var col_piece = this.first_pieces[i].getColumn();
+
+		if((lin_piece == lin) && (col_piece == col)){
+			return i;
+		}
+	}
+
+	for(var i = 0; i < this.second_pieces.length; i++){
+		var lin_piece = this.second_pieces[i].getLine();
+		var col_piece = this.second_pieces[i].getColumn();
+
+		if((lin_piece == lin) && (col_piece == col)){
+			return i;
+		}
+	}
 }
 
 MyBoard.prototype.getBoard = function () {
@@ -118,7 +166,7 @@ MyBoard.prototype.boardToString = function () {
 
 MyBoard.prototype.boardToArray = function () {
 
-	var board_array = this.createArray(9,9);
+	var board_array = createArray(9,9);
 	for(var i = 0; i < 9; i++){
 		for(var j = 0; j < 9; j++){
 			board_array[i][j] = 'empty';
@@ -156,13 +204,13 @@ MyBoard.prototype.boardToArray = function () {
 	return board_array;
 }
 
-MyBoard.prototype.createArray = function(length) {
+function createArray(length) {
     var arr = new Array(length || 0),
         i = length;
 
     if (arguments.length > 1) {
         var args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = this.createArray.apply(this, args);
+        while(i--) arr[length-1 - i] = createArray.apply(this, args);
     }
 
     return arr;
@@ -218,6 +266,7 @@ MyBoard.prototype.display = function () {
 	var degToRad = Math.PI / 180.0;
 
 	this.displayPieces();
+	this.scene.setActiveShader(this.shader);
 
     for(var i = 0; i < 9; i++){
         this.scene.translate(this.size_casa,0, 0);
@@ -232,4 +281,5 @@ MyBoard.prototype.display = function () {
             this.scene.popMatrix();
         }
     }
+    this.scene.setActiveShader(this.scene.defaultShader);
  };
