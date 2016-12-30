@@ -17,7 +17,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyPerspective
 								'MySemiSphere.js','MyLamp.js', 'MyLinearAnimation.js', 'MyCircularAnimation.js','MyPatch.js',
 								'MyPlane.js', 'MyVehicle.js', 'MyChessboard.js', 'MyPiece.js','MyBoard.js', 'MyTopFloor.js',
 								'PieceBoard.js', 'MyQuad.js', 'MyUnitCubeQuad.js', 'TimeCounter.js', 'Game.js', 'PerspAnimation.js',
-								'MyHandler.js', 'Bridge.js', 'Menu.js',
+								'MyHandler.js', 'Bridge.js', 'Menu.js', 'MyKeyAnimation.js',
 main=function()
 {
 	// Standard application, scene and interface setup
@@ -36,7 +36,7 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
-	var filename=getUrlVars()['file'] || "cenaV0.dsx";
+	var filename=getUrlVars()['file'] || "cenaV1.dsx";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors

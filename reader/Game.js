@@ -107,6 +107,12 @@ Game.prototype.autoPlay = async function (){
 		else if(this.currTurn == this.board_second)
 			this.currTurn = this.board_first;
 
+			if(!this.gameOver){
+				this.scene.playPerspAnimation();
+				this.scene.setNextPlayer();
+				await sleep(3000);
+			}
+
 			this.turnOngoing = false;
 		}
 	} while(!this.gameOver)
@@ -522,6 +528,12 @@ Game.prototype.playComputerTurn = async function(){
 			this.currTurn = this.board_second;
 		else if(this.currTurn == this.board_second)
 			this.currTurn = this.board_first;
+
+		if(!this.gameOver){
+				this.scene.playPerspAnimation();
+				this.scene.setNextPlayer();
+				await sleep(3000);
+			}
 
 			this.turnOngoing = false;
 	}	

@@ -40,6 +40,10 @@ XMLscene.prototype.setNextPlayer = function(){
 	this.graph.perspAnimations.setNextPlayer();
 }
 
+XMLscene.prototype.isAnimationOngoing = function(){
+	return this.graph.perspAnimations.ongoing;
+}
+
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 

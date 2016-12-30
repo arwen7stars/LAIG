@@ -151,7 +151,7 @@ TimeCounter.prototype.display = function () {
 
 	this.scene.pushMatrix();
 		this.scene.scale(4,1.5,2);
-		this.scene.translate(0.31,0,-0.55);
+		this.scene.translate(0.31,0,-0.51);
 		this.texture_bkg.bind(0);
 		this.cube.display();
 		this.texture_bkg.unbind();

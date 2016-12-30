@@ -3,16 +3,16 @@
     <scene root="root" axis_length="5" />
     
 	
-    <views default="view0" >
-    
-        <perspective id="view0" near="0.1" far="500" angle="0.4">
-            <from x="15" y="15" z="15" />
-            <to x="0" y="0" z="0" />
-        </perspective>
+    <views default="view1" >
 		
-		<perspective id="view1" near="0.1" far="20" angle="0.4">
-            <from x="15" y="15" z="15" />
-            <to x="-5" y="-5" z="-5" />
+       	<perspective id="view1" near="0.1" far="100" angle="0.4">
+            <from x="3" y="40" z="30" />
+            <to x="3" y="1" z="2" />
+        </perspective>
+
+       	<perspective id="view2" near="0.1" far="100" angle="0.4">
+            <from x="3" y="40" z="-30" />
+            <to x="3" y="1" z="2" />
         </perspective>
         
     </views>
@@ -21,57 +21,55 @@
     <illumination doublesided="1" local="1" >
     
         <ambient r="0" g="0" b="0" a="1.0" />
-        <background r=".4" g=".4" b=".4" a="1.0" />
+        <background r="0" g="0" b="0" a="1.0" />
         
     </illumination>
     
     
     <lights>
     
-        <omni id="defOmni" enabled="1" >
-            <location x="5" y="9" z="5" w="1" />
-             <ambient r="0" g="0" b="0" a="0" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
+       <omni id="defOmni" enabled="1" >
+            <location x="30" y="30" z="30" w="1" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </omni>
+
+         <spot id="defSpot1" enabled="1" angle="0.4" exponent="1">
+            <target x="0" y="0" z="0" />
+            <location x="9" y="15" z="3" />
+			<ambient r="1" g="1" b="1" a="1.0" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+        </spot>
+
+      
+         <spot id="defSpot2" enabled="1" angle="40" exponent="3">
+            <target x="0" y="0" z="0" />
+            <location x="15" y="0" z="3" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+        </spot>
+
         
-        <spot id="defSpot1" enabled="1" angle="40" exponent="1">
-            <target x="5" y="0" z="5" />
-            <location x="3" y="5" z="1" />
-            <ambient r=".3" g=".3" b=".3" a=".3" />
-            <diffuse r=".8" g=".1" b=".4" a=".6" />
-            <specular r=".4" g=".7" b=".6" a=".3" />
+         <spot id="defSpot3" enabled="1" angle="40" exponent="3">
+            <target x="0" y="1" z="0" />
+            <location x="0" y="0" z="15" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
         </spot>
-
-        <spot id="defSpot2" enabled="1" angle="40" exponent="1">
-            <target x="5" y="0" z="5" />
-            <location x="3" y="5" z="1" />
-             <ambient r="0" g="0" b="0" a="0" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
-        </spot>
-
-        <spot id="defSpot3" enabled="1" angle="40" exponent="1">
-            <target x="6" y="2.5" z="1" />
-            <location x="15" y="15" z="15" />
-             <ambient r="0" g="0" b="0" a="0" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
-        </spot>
+      
 		
     </lights>
     
     
     <textures>
-	
-        <texture id="wall" file="../resources/wall.png" length_s="1" length_t="1" />
-        <texture id="floor_tex" file="../resources/floor.png" length_s="1" length_t="1" />
-        <texture id="wood" file="../resources/wood.png" length_s="1" length_t="1" />
-        <texture id="bed_tex" file="../resources/bed.png" length_s="1" length_t="1" />
-        <texture id="pillow" file="../resources/pillow.png" length_s="1" length_t="1" />
-        <texture id="window" file="../resources/window.png" length_s="1" length_t="1" />
-        <texture id="frame" file="../resources/frame.png" length_s="1" length_t="1" />
-
+		<texture id="floor_tex" file="./resources/carpet.png" length_s="1" length_t="1" />
+        <texture id="wood" file="./resources/wood.png" length_s="1" length_t="1" />
+        <texture id="board" file="./resources/wood.jpg" length_s="1" length_t="1" />
+		<texture id="boat" file="./resources/boat.png" length_s="1" length_t="1" />
     </textures>
 
     
@@ -79,17 +77,17 @@
 	
         <material id="root" >
             <emission r="0" g="0" b="0" a="1" />
-            <ambient r=".8" g=".6" b=".6" a="1" />
-            <diffuse r=".8" g=".6" b=".6" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
+            <ambient r="0.8" g="0.6" b="0.6" a="0.5" />
+            <diffuse r="0.8" g="0.6" b="0.6" a="0.5" />
+            <specular r="0" g="0" b="0" a="1.0" />
             <shininess value="100" />
         </material>
 
-        <material id="window" >
-            <emission r="1" g="1" b="1" a="1" />
-            <ambient r=".8" g=".6" b=".6" a="1" />
-            <diffuse r=".8" g=".6" b=".6" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
+        <material id="sea" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0" g="0" b="0" a="1" />
+            <specular r="0" g="0" b="0" a="1.0" />
             <shininess value="100" />
         </material>
         
@@ -104,7 +102,26 @@
         
     </transformations>
     
-    
+    <animations>
+
+    	<animation id="linear1" span="3" type="linear">
+
+       		<controlpoint xx="0" yy="0" zz="0" />
+       		<controlpoint xx="0" yy="0" zz="3" />
+       		<controlpoint xx="3" yy="0" zz="3" />
+       		<controlpoint xx="0" yy="0" zz="0" />
+
+
+    	</animation>
+
+    	<animation id="persp1" span="3" type="perspective" clock="true">
+          <perspectiveref id="view2"/>
+          <perspectiveref id="view1"/>
+        </animation>
+
+
+	</animations>
+
     <primitives>
 	
         <primitive id="rect">
@@ -118,7 +135,50 @@
 		<primitive id="cylinder">
             <cylinder base="1" top="1" height="1" slices="50" stacks="50" />   
         </primitive>
-        
+
+        <primitive id="sphere">
+           	<sphere radius="1.0" slices="30" stacks="30" />   
+        </primitive>
+
+        <primitive id="plane">
+        	<plane dimX="3" dimY="2" partsX="10" partsY="7"/>   
+        </primitive>
+
+        <primitive id="piece_red">
+        	<piece nFloors="3" type="red" />
+        </primitive>
+
+         <primitive id="piece_white">
+        	<piece nFloors="3" type="white" />
+       	 </primitive>
+
+        <primitive id="time_counter">
+			<time_counter/>
+        </primitive>
+
+        <primitive id="patch">
+        	<patch orderU="2" orderV="2" partsU="6" partsV="6" >
+				<controlpoint x="1" y="0" z="2" />
+				<controlpoint x="0" y="0" z="1" />
+				<controlpoint x="0" y="0" z="0" />
+
+				<controlpoint x="2" y="2" z="2" />
+				<controlpoint x="2" y="2" z="1" />
+				<controlpoint x="2" y="2" z="0" />
+
+				<controlpoint x="3" y="0" z="2" />
+				<controlpoint x="4" y="0" z="1" />
+				<controlpoint x="4" y="0" z="0" />
+			</patch>
+        </primitive>
+
+        <primitive id="vehicle">
+        	<vehicle />   
+        </primitive>
+
+ 		<primitive id = "board">
+			<board size_casa="0.21" first_player="red"/>
+		</primitive>		
     </primitives>
     
     
@@ -136,87 +196,55 @@
             <texture id="none" />
             
             <children>
-                <componentref id="walls" />
-                <componentref id="floor" />
-                <componentref id="bed" />
-                <componentref id="window" />
-                <componentref id="frame" />
+            	<componentref id="carpet" />
+                <componentref id="table" />
+                <componentref id="sustainer" />
+                <componentref id="timecounter" />
             </children>   
         </component>
 
-        <component id = "walls">
-			<transformation>
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="wall" />
-            
-            <children>
-                <componentref id="wall_back" />
-                <componentref id="wall_right" />   
-            </children> 
-		</component>
-		
-		<component id = "wall_back">
-			<transformation>
-                <scale x="5.5" y="5" z="4" /> 
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="rect" />  
-            </children> 
-		</component>
-
-		<component id = "wall_right">
-			<transformation>
-				<rotate axis="y" angle="-90" />
-				<rotate axis="x" angle="180" />
-				<scale x="6" y="5" z="4" />
-				<translate x="0" y="-1" z="0" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="inherit" />
-            
-            <children>
-                <primitiveref id="rect" />  
-            </children> 
-        </component>
-
-        <component id = "floor">
+	<component id = "carpet">
 			<transformation>
 				<rotate axis="x" angle="90" />
 				<rotate axis="y" angle="180" />
-				<scale x="5.5" y="6" z="4" />
-				<translate x="-1" y="0" z="0" />
+				<scale x="60" y="60" z="60" />		
+				<translate x="-0.55" y="-0.45" z="-0.1" />
 			</transformation>
 
 			<materials>
-                <material id="inherit" />
+                <material id="sea" />
             </materials>
                     
             <texture id="floor_tex" />
             
             <children>
-                <primitiveref id="rect" />  
+                <primitiveref id="rect" /> 
             </children> 
         </component>
 
-        <component id = "bed">
+        <component id = "sustainer">
 			<transformation>
-				<translate x="2.5" y="0" z="0" />
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="180" />
+				<scale x="2" y="4" z="7" />		
+				<translate x="-5.8" y="0.5" z="-0.8" />
+			</transformation>
+
+			<materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="boat" />
+            
+            <children>
+                <primitiveref id="cylinder" /> 
+            </children> 
+        </component>
+
+        <component id = "table">
+			<transformation>
+				<translate x="4" y="-6" z="-10" />
+				<scale x="6" y="6" z="6" />
 			</transformation>
 
 			<materials>
@@ -226,11 +254,29 @@
             <texture id="inherit" />
             
             <children>
+            	<componentref id="board" />
                 <componentref id="legs" />
-           	 	<componentref id="up_bed" />
-           	 	<componentref id="pillow" />
+           	 	<componentref id="up_table" />
             </children> 
         </component>
+        
+
+        <component id = "board">
+			<transformation>
+				<rotate axis="x" angle="-90" />
+				<translate x="-1.25" y="-2.85" z="1.32" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="wood" />
+            
+            <children>
+                <primitiveref id="board" />   
+            </children> 
+		</component>
 
         <component id = "legs">
 			<transformation>
@@ -241,7 +287,7 @@
                 <material id="inherit" />
             </materials>
                     
-            <texture id="wood" />
+            <texture id="white" />
             
             <children>
                 <componentref id="leg1" />
@@ -253,9 +299,9 @@
 
         <component id = "leg1">
 			<transformation>
-				<translate x="-1" y="0.5" z="-1.5" />
+				<translate x="-0.75" y="1" z="-0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.2" y="0.2" z="1" />
+				<scale x="0.15" y="0.15" z="1" />
 			</transformation>
 
 			<materials>
@@ -271,9 +317,9 @@
 
         <component id = "leg2">
 			<transformation>
-				<translate x="1" y="0.5" z="-1.5" />
+				<translate x="0.4" y="1" z="-0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.2" y="0.2" z="1" />
+				<scale x="0.15" y="0.15" z="1" />
 			</transformation>
 
 			<materials>
@@ -289,9 +335,9 @@
 
         <component id = "leg3">
 			<transformation>
-				<translate x="1" y="0.5" z="1.5" />
+				<translate x="0.4" y="1" z="0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.2" y="0.2" z="1" />
+				<scale x="0.15" y="0.15" z="1" />
 			</transformation>
 
 			<materials>
@@ -307,9 +353,9 @@
 
         <component id = "leg4">
 			<transformation>
-				<translate x="-1" y="0.5" z="1.5" />
+				<translate x="-0.75" y="1" z="0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.2" y="0.2" z="1" />
+				<scale x="0.15" y="0.15" z="1" />
 			</transformation>
 
 			<materials>
@@ -323,17 +369,17 @@
             </children> 
         </component>
 
-         <component id = "up_bed">
+         <component id = "up_table">
 			<transformation>
 				<translate x="-1.2" y="1" z="2" />
-				<scale x="2.4" y="0.5" z="3.4" />
+				<scale x="2" y="0.3" z="2" />
 			</transformation>
 
 			<materials>
                 <material id="inherit" />
             </materials>
 
-            <texture id="bed_tex" />
+            <texture id="board" />
 
         	<children>
                  <componentref id="cube" />
@@ -460,65 +506,28 @@
                 <primitiveref id="rect" /> 
             </children> 
         </component>
-		
-		<component id = "pillow">
-        	<transformation>
-        		<translate x="0" y="1.8" z="1" />
-        		<scale x="1.8" y="0.3" z="0.3" />
-			<rotate axis="y" angle="90" />
+
+		<component id = "timecounter">
+			<transformation>
+				<translate x="11.5" y="2.3" z="0.7" />
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="-90" />
 			</transformation>
 
 			<materials>
                 <material id="inherit" />
             </materials>
                     
-            <texture id="pillow" />
-           		 
+            <texture id="inherit" />
+            
             <children>
-                <primitiveref id="cylinder" /> 
+                <primitiveref id="time_counter" /> 
             </children> 
         </component>
-
-        <component id = "window">
-        	<transformation>
-        		<rotate axis="y" angle="-90" />
-				<rotate axis="x" angle="180" />
-				<translate x="1.5" y="-3.5" z="0.01" />
-				<scale x="3" y="2" z="1" />
-
-			</transformation>
-
-			<materials>
-                <material id="window" />
-            </materials>
-                    
-            <texture id="window" />
-           		 
-            <children>
-                <primitiveref id="rect" /> 
-            </children> 
-
-        </component>
-
-        <component id = "frame">
-        	<transformation>
-				<translate x="2.5" y="2.5" z="0.1" />
-				<scale x="2.5" y="3" z="3" />
-				<rotate axis="z" angle="90" />
-			</transformation>
-
-			<materials>
-                <material id="inherit" />
-            </materials>
-                    
-            <texture id="frame" />
-           		 
-            <children>
-                <primitiveref id="triangle" /> 
-            </children> 
-        </component>
-
-        
+       
     </components>
+
+    
+
 
 </dsx>
