@@ -11,13 +11,13 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyPerspective.js', 'MyCylinder.js', 'MyRectangle.js', 
-								'MyTriangle.js', 'MyPrimitive.js', 'MyNode.js', 'MyTransformation.js', 'MyCylinderWithTops.js',
-								'MyCircle.js', 'MyInterface.js','MyLight.js','MyTexture.js', 'MyMaterial.js', 'MySphere.js',
-								'MySemiSphere.js','MyLamp.js', 'MyLinearAnimation.js', 'MyCircularAnimation.js','MyPatch.js',
-								'MyPlane.js', 'MyVehicle.js', 'MyChessboard.js', 'MyPiece.js','MyBoard.js', 'MyTopFloor.js',
-								'PieceBoard.js', 'MyQuad.js', 'MyUnitCubeQuad.js', 'TimeCounter.js', 'Game.js', 'PerspAnimation.js',
-								'MyHandler.js', 'Bridge.js', 'Menu.js', 'MyKeyAnimation.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'parser/MyPerspective.js', 'primitives/MyCylinder.js', 'primitives/MyRectangle.js', 
+								'primitives/MyTriangle.js', 'parser/MyPrimitive.js', 'parser/MyNode.js', 'parser/MyTransformation.js', 'primitives/MyCylinderWithTops.js',
+								'primitives/MyCircle.js', 'MyInterface.js','parser/MyLight.js','parser/MyTexture.js', 'parser/MyMaterial.js', 'primitives/MySphere.js',
+								'primitives/MySemiSphere.js','primitives/MyLamp.js', 'MyLinearAnimation.js', 'MyCircularAnimation.js','primitives/MyPatch.js',
+								'primitives/MyPlane.js', 'primitives/MyVehicle.js', 'primitives/MyChessboard.js', 'MyPiece.js', 'MyBoard.js', 'MyTopFloor.js',
+								'PieceBoard.js', 'primitives/MyQuad.js', 'primitives/MyUnitCubeQuad.js', 'BoardScore.js', 'Game.js', 'PerspAnimation.js',
+								'MyHandler.js', 'Menu.js', 'MyKeyAnimation.js',
 main=function()
 {
 	// Standard application, scene and interface setup
@@ -36,12 +36,13 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
-	var filename=getUrlVars()['file'] || "cenaV1.dsx";
+	var filename=getUrlVars()['file'] || "cenaV0.dsx";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
+	//new MySceneGraph(filename1, myScene);
 	var myGraph = new MySceneGraph(filename, myScene);
-	
+
 	// start
     app.run();
 }

@@ -105,6 +105,8 @@ console.log("tanimicao " + tAnimation + " i " + i);
                 break;
             }
         }
+
+        if(tAnimation < this.span){
     
 console.log("----- NEXT " + prevSecond);
      /*  //deslocamentos em x, y, z 
@@ -139,7 +141,7 @@ console.log("----- NEXT " + prevSecond);
         mat4.translate(newMatrix, newMatrix, [this.center[0], this.center[1], this.center[2]]);
         
         this.matrix = newMatrix;
-
+        }
 
 
     }

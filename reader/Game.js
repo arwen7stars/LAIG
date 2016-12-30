@@ -26,11 +26,19 @@ function Game(scene, board) {
 
 	this.currTurn = this.board_first;
 	this.moveInProgress = false;
-	
+
+	this.changeCamera = false;
+	this.allowMove = false;
+
+	this.onhold = false;
 }
 
 Game.prototype = Object.create(CGFobject.prototype);
 Game.prototype.constructor = Game;
+
+Game.prototype.setNextPersp = function(){
+	this.changeCamera = true;
+}
 
 Game.prototype.startGame = function(gameMode, difficulty){
     this.gameMode = gameMode;
@@ -99,7 +107,7 @@ Game.prototype.autoPlay = async function (){
 			console.log("DEST LINE " + dest_line + " DEST COLUMN " + dest_col);
 
 			this.movePiece(piece, dest_line, dest_col);
-			await sleep(3000);
+			await sleep(3500);
 
 		// passa para o proximo turno
 		if(this.currTurn == this.board_first)
@@ -154,22 +162,25 @@ Game.prototype.selectPiece = function(obj, customId){
 	var isFirstPiece = obj.isFirstPiece();
 	// verifica se o objeto selecionado e do primeiro jogador
 
-	if (isFirstPiece && (this.currTurn == this.board_first)){     // first pieces
-		this.sel_first = customId % 100;
-		this.sel_piece = obj;
+	console.log("ONHOLD " + this.onhold)
+	if(!this.onhold){
+		if (isFirstPiece && (this.currTurn == this.board_first)){     // first pieces
+			this.sel_first = customId % 100;
+			this.sel_piece = obj;
 
-		this.board.updatePieceSelected(true);	// se uma peca estiver selecionada entao muda o id do picking
-		// agora ao fazer picking das pecas torna-se possivel a selecao das casas em que estas se encontram
+			this.board.updatePieceSelected(true);	// se uma peca estiver selecionada entao muda o id do picking
+			// agora ao fazer picking das pecas torna-se possivel a selecao das casas em que estas se encontram
 
-		console.log("FIRST PIECE SELECTED " + this.sel_first);
+			console.log("FIRST PIECE SELECTED " + this.sel_first);
 
-	} else if(!isFirstPiece && (this.currTurn == this.board_second)) {  // second pieces
-		this.sel_second = customId % 200;
-		this.sel_piece = obj;
+		} else if(!isFirstPiece && (this.currTurn == this.board_second)) {  // second pieces
+			this.sel_second = customId % 200;
+			this.sel_piece = obj;
 
-		this.board.updatePieceSelected(true);
+			this.board.updatePieceSelected(true);
 
-		console.log("SECOND PIECE SELECTED " + this.sel_second);
+			console.log("SECOND PIECE SELECTED " + this.sel_second);
+		}
 	}
 }
 
@@ -417,6 +428,7 @@ Game.prototype.movePiece = async function (piece, line, column){
 	console.log("FIRST " + scores[0] + " SECOND " + scores[1]);
 
 	if(scores[0] >= 7 || scores[1] >= 7){
+		this.score_board.update(scores[0], scores[1]);
 		this.gameOver = true;
 		console.log("JOGO ACABOU!!!!!!!!!!!!!!");
 		
@@ -427,12 +439,23 @@ Game.prototype.movePiece = async function (piece, line, column){
 
 }
 
+Game.prototype.undoLastPlay = function(){
+	if(this.humanTurn){
+		this.onhold = false;
+				
+		if(this.currTurn == this.board_first){
+			this.board.setFirstPieces(this.previous_board);
+		} else this.board.setSecondPieces(this.previous_board);
+	}
+}
+
 Game.prototype.playHumanTurn = async function(customId){
 		this.sel_column = Math.floor(customId/10);
 		this.sel_line = customId % 10;
 
 	if( (this.sel_first > -1 || this.sel_second > -1) && !this.moveInProgress){
 		this.moveInProgress = true;
+
 		var sel_line = this.sel_line;
 		var sel_column = this.sel_column;
 		var sel_piece = this.sel_piece;
@@ -446,29 +469,22 @@ Game.prototype.playHumanTurn = async function(customId){
 		await sleep(1000);
 
 		if(valid_move && valid_push){
+
+			if(this.currTurn == this.board_first)
+				this.previous_board = this.board.cloneFirstPieces();
+			else this.previous_board = this.board.cloneSecondPieces();
+
 			this.movePiece(sel_piece, sel_line, sel_column);
 			await sleep(3500);
 
-			if(this.currTurn == this.board_first)
-				this.currTurn = this.board_second;
-			else if(this.currTurn == this.board_second)
-				this.currTurn = this.board_first;
-
-			this.scene.playPerspAnimation();
-			this.scene.setNextPlayer();
-			
-			this.board.updatePieceSelected(false);
 			this.sel_first = -1;
 			this.sel_second = -1;
+			this.board.updatePieceSelected(false);
+			this.onhold = true;
+			this.allowMove = true;
 		}
 		
 		this.moveInProgress = false;
-
-		if(this.gameMode == 1){
-			console.log("GAME MODE " + this.gameMode);
-			this.humanTurn = false;
-			this.computerTurn = true;
-		}
 	}	
 	
 }
@@ -533,13 +549,14 @@ Game.prototype.playComputerTurn = async function(){
 				this.scene.playPerspAnimation();
 				this.scene.setNextPlayer();
 				await sleep(3000);
-			}
+		}
 
-			this.turnOngoing = false;
+		this.turnOngoing = false;
 	}	
 }
 
 Game.prototype.picking = function (obj, customId){
+		// joga o turno do humano nos modos humano vs humano e humano vs computador
 		if (obj && this.humanTurn && !this.gameOver)
 		{			
 			console.log("Picked object: " + obj + ", with pick id " + customId);
@@ -560,14 +577,38 @@ Game.prototype.display = function () {
 }
 
 
-Game.prototype.update = function () {
+Game.prototype.update = function (currTime) {
+	// consoante o turno de jogador muda, vai mostrar no scoreboard o jogador atual
 	this.score_board.setActivePlayer(this.currTurn);
 
 	if(!this.humanTurn && this.computerTurn && !this.gameOver){
+		// joga o turno do computador do modo jogador vs computador
 		this.playComputerTurn();
 
+		// passa para o proximo turno
 		this.humanTurn = true;
 		this.computerTurn = false;
+
+	}
+
+	if(this.changeCamera && !this.moveInProgress && this.humanTurn && this.allowMove){
+		if(this.currTurn == this.board_first)
+			this.currTurn = this.board_second;
+		else if(this.currTurn == this.board_second)
+			this.currTurn = this.board_first;
+
+		this.scene.playPerspAnimation();
+		this.scene.setNextPlayer();
+
+		this.onhold = false;
+
+		if(this.gameMode == 1){
+			console.log("GAME MODE " + this.gameMode);
+			this.humanTurn = false;
+		this.computerTurn = true;
+		}
+		this.changeCamera = false;
+		this.allowMove = false;
 
 	}
 }

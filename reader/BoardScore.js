@@ -2,7 +2,7 @@
  * Creates a MyPiece object 
  * Uses two MySemiSphere objects to create a sphere
  */
-function TimeCounter(scene, first_score, second_score) {
+function BoardScore(scene, first_score, second_score) {
  	CGFobject.call(this,scene);
  	this.first_score = first_score;
  	this.second_score = second_score;
@@ -36,10 +36,10 @@ function TimeCounter(scene, first_score, second_score) {
  	this.chooseTexture();
  };
 
-TimeCounter.prototype = Object.create(CGFobject.prototype);
-TimeCounter.prototype.constructor = TimeCounter;
+BoardScore.prototype = Object.create(CGFobject.prototype);
+BoardScore.prototype.constructor = BoardScore;
 
-TimeCounter.prototype.chooseTexture = function () {
+BoardScore.prototype.chooseTexture = function () {
 	
 	if(this.first_score == 0)
  		this.texture_first_score = this.zero;
@@ -77,14 +77,14 @@ TimeCounter.prototype.chooseTexture = function () {
 
 }
 
-TimeCounter.prototype.update = function (first_score, second_score) {
+BoardScore.prototype.update = function (first_score, second_score) {
 	this.first_score = first_score;
 	this.second_score = second_score;
 
 	this.chooseTexture();
 }
 
-TimeCounter.prototype.setPlayers = function(first_player, second_player){
+BoardScore.prototype.setPlayers = function(first_player, second_player){
 	this.first_player = first_player;
 	this.second_player = second_player;
 
@@ -101,11 +101,11 @@ TimeCounter.prototype.setPlayers = function(first_player, second_player){
 	}
 }
 
-TimeCounter.prototype.setActivePlayer = function(curr_player){
+BoardScore.prototype.setActivePlayer = function(curr_player){
 	this.active_player = curr_player;
 }
 
-TimeCounter.prototype.display = function () {
+BoardScore.prototype.display = function () {
 
 	if(this.active_player == this.second_player){
 		this.scene.setActiveShader(this.shader);

@@ -22,6 +22,10 @@ PieceBoard.prototype.movePiece = function(col, lin) {
 	this.col = col;
 }
 
+PieceBoard.prototype.getSizeCasa = function(){
+	return this.size_casa;
+}
+
 PieceBoard.prototype.getColumn = function() {
 	return this.col;
 }

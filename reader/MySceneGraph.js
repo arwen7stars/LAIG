@@ -719,10 +719,10 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 			var vehicle = new MyVehicle(this.scene);
 			var prim = new MyPrimitive(primID, vehicle);
 
-		} else if (primitive_name == "time_counter") {
+		} else if (primitive_name == "board_score") {
 			console.log("time counter found");
 
-			var tim = new TimeCounter(this.scene, 0, 0);
+			var tim = new BoardScore(this.scene, 0, 0);
 			var prim = new MyPrimitive(primID, tim);
 		}
 		else if (primitive_name == "chessboard") {

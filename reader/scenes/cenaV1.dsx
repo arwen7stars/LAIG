@@ -21,7 +21,7 @@
     <illumination doublesided="1" local="1" >
     
         <ambient r="0" g="0" b="0" a="1.0" />
-        <background r="0" g="0" b="0" a="1.0" />
+        <background r="0.47" g="0.44" b="0.32" a="1.0" />
         
     </illumination>
     
@@ -66,10 +66,14 @@
     
     
     <textures>
-		<texture id="floor_tex" file="./resources/carpet.png" length_s="1" length_t="1" />
-        <texture id="wood" file="./resources/wood.png" length_s="1" length_t="1" />
-        <texture id="board" file="./resources/wood.jpg" length_s="1" length_t="1" />
+		<texture id="floor_tex" file="./resources/tatami.jpg" length_s="1" length_t="1" />
+        <texture id="wood" file="./resources/black_wood.jpg" length_s="1" length_t="1" />
+        <texture id="board" file="./resources/seamless.jpg" length_s="1" length_t="1" />
 		<texture id="boat" file="./resources/boat.png" length_s="1" length_t="1" />
+		<texture id="tatami" file="./resources/tatami.jpg" length_s="1" length_t="1" />
+		<texture id="legs" file="./resources/legs.png" length_s="1" length_t="1" />
+		<texture id="blanket" file="./resources/blanket.jpg" length_s="1" length_t="1" />
+
     </textures>
 
     
@@ -152,8 +156,8 @@
         	<piece nFloors="3" type="white" />
        	 </primitive>
 
-        <primitive id="time_counter">
-			<time_counter/>
+        <primitive id="board_score">
+			<board_score/>
         </primitive>
 
         <primitive id="patch">
@@ -199,20 +203,22 @@
             	<componentref id="carpet" />
                 <componentref id="table" />
                 <componentref id="sustainer" />
-                <componentref id="timecounter" />
+                <componentref id="boardscore" />
+                <componentref id="seatone" />
+                <componentref id="seattwo" />
             </children>   
         </component>
 
-	<component id = "carpet">
+		<component id = "carpet">
 			<transformation>
 				<rotate axis="x" angle="90" />
 				<rotate axis="y" angle="180" />
 				<scale x="60" y="60" z="60" />		
-				<translate x="-0.55" y="-0.45" z="-0.1" />
+				<translate x="-0.55" y="-0.45" z="-0.07" />
 			</transformation>
 
 			<materials>
-                <material id="sea" />
+                <material id="inherit" />
             </materials>
                     
             <texture id="floor_tex" />
@@ -222,12 +228,50 @@
             </children> 
         </component>
 
+        <component id = "seatone">
+			<transformation>
+				<translate x="3" y="-4" z="13" />
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="180" />
+				<scale x="3" y="3" z="3" />		
+			</transformation>
+
+			<materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="blanket" />
+            
+            <children>
+                <primitiveref id="cylinder" /> 
+            </children> 
+        </component>
+
+        <component id = "seattwo">
+			<transformation>
+				<translate x="3" y="-4" z="-9" />
+				<rotate axis="x" angle="90" />
+				<rotate axis="y" angle="180" />
+				<scale x="3" y="3" z="3" />		
+			</transformation>
+
+			<materials>
+                <material id="inherit" />
+            </materials>
+                    
+            <texture id="blanket" />
+            
+            <children>
+                <primitiveref id="cylinder" /> 
+            </children> 
+        </component>
+
         <component id = "sustainer">
 			<transformation>
 				<rotate axis="x" angle="90" />
 				<rotate axis="y" angle="180" />
-				<scale x="2" y="4" z="7" />		
-				<translate x="-5.8" y="0.5" z="-0.8" />
+				<scale x="2" y="4" z="6" />		
+				<translate x="-5.8" y="0.5" z="-0.7" />
 			</transformation>
 
 			<materials>
@@ -280,14 +324,15 @@
 
         <component id = "legs">
 			<transformation>
-				<translate x="0" y="0" z="2" />
+				<scale x="1" y="0.72" z="1" />
+				<translate x="0" y="0.4" z="2" />
 			</transformation>
 
 			<materials>
                 <material id="inherit" />
             </materials>
                     
-            <texture id="white" />
+            <texture id="board" />
             
             <children>
                 <componentref id="leg1" />
@@ -299,9 +344,9 @@
 
         <component id = "leg1">
 			<transformation>
-				<translate x="-0.75" y="1" z="-0.8" />
+				<translate x="-1.2" y="0.49" z="-1.0" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.15" y="0.15" z="1" />
+				<scale x="0.2" y="0.2" z="1" />
 			</transformation>
 
 			<materials>
@@ -311,15 +356,15 @@
             <texture id="inherit" />
            		 
             <children>
-                <primitiveref id="cylinder" /> 
+                <componentref id="cube" /> 
             </children> 
         </component>
 
         <component id = "leg2">
 			<transformation>
-				<translate x="0.4" y="1" z="-0.8" />
+				<translate x="0.6" y="0.49" z="-1.0" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.15" y="0.15" z="1" />
+				<scale x="0.2" y="0.2" z="1" />
 			</transformation>
 
 			<materials>
@@ -329,15 +374,15 @@
             <texture id="inherit" />
            		 
             <children>
-                <primitiveref id="cylinder" /> 
+                <componentref id="cube" /> 
             </children> 
         </component>
 
         <component id = "leg3">
 			<transformation>
-				<translate x="0.4" y="1" z="0.8" />
+				<translate x="0.6" y="0.49" z="0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.15" y="0.15" z="1" />
+				<scale x="0.2" y="0.2" z="1" />
 			</transformation>
 
 			<materials>
@@ -347,15 +392,15 @@
             <texture id="inherit" />
            		 
             <children>
-                <primitiveref id="cylinder" /> 
+                <componentref id="cube" /> 
             </children> 
         </component>
 
         <component id = "leg4">
 			<transformation>
-				<translate x="-0.75" y="1" z="0.8" />
+				<translate x="-1.2" y="0.49" z="0.8" />
 				<rotate axis="x" angle="90" />
-				<scale x="0.15" y="0.15" z="1" />
+				<scale x="0.2" y="0.2" z="1" />
 			</transformation>
 
 			<materials>
@@ -365,7 +410,7 @@
             <texture id="inherit" />
            		 
             <children>
-                <primitiveref id="cylinder" /> 
+                <componentref id="cube" /> 
             </children> 
         </component>
 
@@ -507,7 +552,7 @@
             </children> 
         </component>
 
-		<component id = "timecounter">
+		<component id = "boardscore">
 			<transformation>
 				<translate x="11.5" y="2.3" z="0.7" />
 				<rotate axis="y" angle="-90" />
@@ -521,7 +566,7 @@
             <texture id="inherit" />
             
             <children>
-                <primitiveref id="time_counter" /> 
+                <primitiveref id="board_score" /> 
             </children> 
         </component>
        

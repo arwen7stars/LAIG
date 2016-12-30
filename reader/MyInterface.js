@@ -23,11 +23,12 @@ MyInterface.prototype.init = function(application) {
 	
 	this.gui = new dat.GUI();
 
-	this.omniLights=this.gui.addFolder("Omni Lights");
-	this.spotLights=this.gui.addFolder("Spot Lights");
-	this.omniLights.open();
-	this.spotLights.open();
-
+	this.lights = this.gui.addFolder("Lights");
+	this.omniLights = this.lights.addFolder("Omni Lights");
+	this.spotLights = this.lights.addFolder("Spot Lights");
+	this.controls = this.gui.addFolder("Controls");
+	this.controls.add(this, "handleUndo").name("Undo");
+	this.controls.open();
 	return true;
 };
 
@@ -39,6 +40,10 @@ MyInterface.prototype.addSpotLight = function(lightId) {
 		this.spotLights.add(this.scene, lightId);
 };
 
+MyInterface.prototype.handleUndo= function(){
+	this.scene.game.undoLastPlay();
+}
+
 /**
  * processKeyboard
  * @param event {Event}
@@ -48,6 +53,8 @@ MyInterface.prototype.processKeyboard = function(event) {
 	
 	switch (event.keyCode)
 	{
-		
+		case(13): // v
+            this.scene.game.setNextPersp();
+            break;
 	};
 };

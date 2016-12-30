@@ -79,9 +79,10 @@ XMLscene.prototype.init = function (application) {
 	this.menu = new Menu(this);
 	
 	this.setPickEnabled(true);
+	
 };
 
-XMLscene.prototype.getTimeCounter = function(list) {
+XMLscene.prototype.getBoardScore = function(list) {
 	var nComp = list.length;
 	var compAtual;
 
@@ -96,7 +97,7 @@ XMLscene.prototype.getTimeCounter = function(list) {
 
 			for(var j = 0; j < nPrim; j++){
 
-				if(primitives[j].getPrimitive() instanceof TimeCounter){
+				if(primitives[j].getPrimitive() instanceof BoardScore){
 					console.log("TIME COUNTER FOUND");
 					this.time_counter = primitives[j].getPrimitive();
 					//primitives[j].getPrimitive().update(Math.floor(this.seconds / 10), this.seconds % 10, Math.floor(this.minutes / 10), this.minutes % 10);
@@ -109,7 +110,7 @@ XMLscene.prototype.getTimeCounter = function(list) {
 		var children = this.getChildren(compAtual); //mandar as children de novo para esta funcao
 		if(children.length > 0){
 
-			this.getTimeCounter(children);
+			this.getBoardScore(children);
 		}
 	}
 }
@@ -160,7 +161,7 @@ XMLscene.prototype.initCameras = function () {
 XMLscene.prototype.update = function(currTime) {
 	if(this.graph.loadedOk){
 		if(this.menu.hasGameStarted()){
-			this.game.update();
+			this.game.update(currTime);
 			//for(var i = 0; i < this.graph.perspAnimations.length; i++)
 				this.graph.perspAnimations.update(currTime);
 		}
@@ -353,7 +354,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 
 	var rootVector = [];
 	rootVector.push(this.graph.component_list[0]);
-	this.getTimeCounter(rootVector);
+	this.getBoardScore(rootVector);
 	this.game = new Game(this, this.board);
 	this.game.setBoardScore(this.time_counter);
 };

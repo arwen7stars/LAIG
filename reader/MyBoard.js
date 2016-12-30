@@ -62,6 +62,71 @@ MyBoard.prototype.getSecondPieces = function () {
 	return this.second_pieces;
 }
 
+MyBoard.prototype.setFirstPieces = function(first_pieces){
+
+	this.first_pieces.splice(0, this.first_pieces.length);
+
+
+	for(var i = 0; i < first_pieces.length; i++){
+		console.log(nfloors + " " + line + " " + column + " " + size_casa + " " + isFirstPlayer);
+		var nfloors = first_pieces[i].getNFloors();
+		var line = first_pieces[i].getLine();
+		var column = first_pieces[i].getColumn();
+		var size_casa = first_pieces[i].getSizeCasa();
+		var type = first_pieces[i].getType();
+		var isFirstPlayer = first_pieces[i].isFirstPiece();
+		this.first_pieces[i] = new PieceBoard(this.scene, nfloors, line, column, size_casa, type, isFirstPlayer);
+	}
+}
+
+MyBoard.prototype.setSecondPieces = function(second_pieces){
+
+	this.second_pieces.splice(0, this.first_pieces.length);
+
+	for(var i = 0; i < second_pieces.length; i++){
+		console.log(nfloors + " " + line + " " + column + " " + size_casa + " " + isFirstPlayer);
+		var nfloors = second_pieces[i].getNFloors();
+		var line = second_pieces[i].getLine();
+		var column = second_pieces[i].getColumn();
+		var size_casa = second_pieces[i].getSizeCasa();
+		var type = second_pieces[i].getType();
+		var isFirstPlayer = second_pieces[i].isFirstPiece();
+		this.second_pieces[i] = new PieceBoard(this.scene, nfloors, line, column, size_casa, type, isFirstPlayer);
+	}
+}
+
+MyBoard.prototype.cloneFirstPieces = function(){
+	var vec = [];
+	for(var i = 0; i < this.first_pieces.length; i++){
+		var nFloors = this.first_pieces[i].getNFloors();
+		var line = this.first_pieces[i].getLine();
+		var column = this.first_pieces[i].getColumn();
+		var size_casa = this.first_pieces[i].getSizeCasa();
+		var type = this.first_pieces[i].getType();
+		var isFirstPlayer = this.first_pieces[i].isFirstPiece();
+		vec[i] = new PieceBoard(this.scene, nFloors, line, column, size_casa, type, isFirstPlayer);
+	}
+	return vec;
+}
+
+MyBoard.prototype.cloneSecondPieces = function() {
+	var vec = [];
+	for(var i = 0; i < this.second_pieces.length; i++){
+		var nFloors = this.second_pieces[i].getNFloors();
+		var line = this.second_pieces[i].getLine();
+		var column = this.second_pieces[i].getColumn();
+		var size_casa = this.second_pieces[i].getSizeCasa();
+		var type = this.second_pieces[i].getType();
+		var isFirstPlayer = this.second_pieces[i].isFirstPiece();
+		vec[i] = new PieceBoard(this.scene, nFloors, line, column, size_casa, type, isFirstPlayer);
+	}
+	return vec;
+}
+
+MyBoard.prototype.setSecondPieces = function(second_pieces){
+	this.second_pieces = second_pieces;
+}
+
 MyBoard.prototype.getPiece = function(col, lin){
 
 	for(var i = 0; i < this.first_pieces.length; i++){
